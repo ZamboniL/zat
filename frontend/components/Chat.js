@@ -1,9 +1,9 @@
 import styled from "styled-components";
+import Messages from "./Messages";
 
 const Container = styled.div`
   grid-column: 2 / 3;
   grid-row: 1 / 2;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const List = styled.ul`
@@ -15,7 +15,7 @@ const List = styled.ul`
   &::-webkit-scrollbar {
     width: 10px;
   }
-  &::-webkit-scrollbar-track,
+  &::-group_messageswebkit-scrollbar-track,
   &::-webkit-scrollbar-thumb {
     background: rgba(0, 0, 0, 0.15);
     border-radius: 10px;
@@ -26,22 +26,11 @@ const List = styled.ul`
   }
 `;
 
-const Item = styled.li`
-  padding: 0.5rem 1rem;
-  word-break: break-word;
-  transition: background 0.15s ease-in-out;
-  color: rgba(255, 255, 255, 0.8);
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.1);
-  }
-`;
-
-export default function Chat() {
+export default function Chat({ messages }) {
   return (
     <Container>
       <List>
-        <Item>hahahaa</Item>
+        <Messages messagesArray={messages} />
       </List>
     </Container>
   );

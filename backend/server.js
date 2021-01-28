@@ -4,42 +4,19 @@ const http = require("http").createServer(app);
 const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
-const passport = require("passport");
-const localStrategy = require("passport-local");
-const bodyParser = require("body-parser");
 const session = require("express-session");
 const cookieParser = require("cookie-parser");
-const User = require("./models/user.model");
 const io = require("socket.io")(http, {
   cors: {
     origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    withCredentials: true,
   },
 });
 
 const port = process.env.PORT || 4000;
 
 // Middleware
-
-app.use(
-  cors({
-    origin: "http://localhost:3000",
-    credentials: true,
-  })
-);
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(
-  session({
-    secret: "secretcode",
-    resave: true,
-    saveUninitialized: true,
-  })
-);
-app.use(cookieParser("secretcode"));
-app.use(passport.initialize());
-app.use(passport.session());
-require("./config/passportConfig")(passport);
 
 // mongodb connect
 const uri = process.env.ATLAS_URI;
@@ -53,13 +30,32 @@ connection.once("open", () => {
   console.log("MongoDB database connection was succesful");
 });
 
+app.use(
+  cors({
+    origin: "http://localhost:3000",
+    methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+    credentials: true,
+  })
+);
+app.use(cookieParser());
+app.use(express.json());
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: true,
+    saveUninitialized: true,
+    cookie: { maxAge: 8 * 60 * 60 * 1000 },
+  })
+);
+
 // Routes
 const authRouter = require("./routes/auth");
 const groupRouter = require("./routes/group");
+const messageRouter = require("./routes/message");
 
 app.use("/api/auth", authRouter);
-
 app.use("/api/groups", groupRouter);
+app.use("/api/message", messageRouter);
 
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/index.html");

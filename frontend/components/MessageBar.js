@@ -3,7 +3,6 @@ import styled from "styled-components";
 const Form = styled.form`
   grid-row: 2 / 3;
   grid-column: 2 / 3;
-  background: rgba(0, 0, 0, 0.15);
   padding: 1rem;
 `;
 
@@ -18,7 +17,6 @@ const Input = styled.input`
   color: white;
   border: none;
   outline: none;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 `;
 
 const Send = styled.button`
@@ -33,17 +31,16 @@ const Send = styled.button`
   border-top-left-radius: 0;
   cursor: pointer;
   transition: background 0.15s ease-in-out;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
 
   &:hover {
     background: rgba(0, 0, 0, 0.25);
   }
 `;
 
-export default function MessageBar() {
+export default function MessageBar({ onMessageChange, onMessageSubmit }) {
   return (
-    <Form>
-      <Input type="text" />
+    <Form onSubmit={onMessageSubmit}>
+      <Input type="text" name="messageBar" onChange={onMessageChange} />
       <Send>Send</Send>
     </Form>
   );

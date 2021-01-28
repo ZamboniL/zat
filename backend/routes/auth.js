@@ -1,50 +1,107 @@
 const router = require("express").Router();
 const User = require("../models/user.model");
-const passport = require("passport");
-require("../config/passportConfig")(passport);
+const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const auth = require("../middleware/auth");
 
-router.route("/register").post((req, res) => {
-  User.findOne({ email: req.body.email }, (err, doc) => {
-    if (err) throw err;
-    if (doc) {
-      res.status(400).send("Uma conta com esse email já existe");
-    }
-    if (!doc) {
-      User.findOne({ username: req.body.username }, async (err, doc) => {
+// @route   POST /api/auth/register
+// @desc    Register new user
+// @access  Public
+router.post("/register", (req, res) => {
+  const { username, email, password } = req.body;
+
+  // Validation
+  if (!username || !email || !password) {
+    return res.status(400).json({ msg: "Please enter all fields" });
+  }
+
+  // Check for existing user
+  User.findOne({ email }).then((user) => {
+    if (user) return res.status(400).json({ msg: "User already exists" });
+
+    const newUser = new User({ username, email, password });
+
+    // Password hash generation
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(newUser.password, salt, (err, hash) => {
         if (err) throw err;
-        if (doc) {
-          res.status(400).send("Este username já existe");
-        }
-        if (!doc) {
-          const newUser = new User({
-            username: req.body.username,
-            password: req.body.password,
-            email: req.body.email,
-          });
-          await newUser.save((err) => {
-            if (err) throw err;
-          });
-          res.send("User Created");
-        }
+        newUser.password = hash;
+        newUser.save().then((user) => {
+          jwt.sign(
+            { id: user.id },
+            process.env.JWT_SECRET,
+            {
+              expiresIn: 3600 * 24,
+            },
+            (err, token) => {
+              if (err) throw err;
+
+              res.json({
+                token,
+                user: {
+                  id: user.id,
+                  username: user.username,
+                  email: user.email,
+                },
+              });
+            }
+          );
+        });
       });
-    }
+    });
   });
 });
 
-router.route("/login").post((req, res, next) => {
-  passport.authenticate("local", (err, user, info) => {
-    if (err) throw err;
-    if (!user) res.status(404).send("Usuário não encontrado");
-    else {
-      console.log("hiiii");
-      req.login(user, function (err) {
-        if (err) {
-          return next(err);
+// @route   POST /api/auth/login
+// @desc    Auth user
+// @access  Public
+router.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  // Validation
+  if (!email || !password) {
+    return res.status(400).json({ msg: "Please enter all fields" });
+  }
+
+  // Check for existing user
+  User.findOne({ email }).then((user) => {
+    if (!user) return res.status(400).json({ msg: "User does not exist" });
+
+    // Validate password sent with hash generated previously
+    bcrypt.compare(password, user.password).then((isMatch) => {
+      if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+
+      jwt.sign(
+        { id: user.id },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: 3600 * 24,
+        },
+        (err, token) => {
+          if (err) throw err;
+
+          res.json({
+            token,
+            user: {
+              id: user.id,
+              username: user.username,
+              email: user.email,
+            },
+          });
         }
-        return res.redirect("/");
-      });
-    }
-  })(req, res, next);
+      );
+    });
+  });
+});
+
+// @route   GET /api/auth/user
+// @desc    get user data
+// @access  Private
+router.get("/user", auth, (req, res) => {
+  User.findById(req.user.id)
+    .select("-password")
+    .then((user) => res.json(user));
 });
 
 module.exports = router;

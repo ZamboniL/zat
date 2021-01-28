@@ -11,12 +11,20 @@ const FormLayout = styled.form`
     padding-bottom: 0.5rem;
   }
 `;
+const Error = styled.span`
+  color: var(--error);
+  font-size: 0.8em;
+  float: right;
+`;
 
 const Input = styled.input`
   font-size: 1rem;
   outline: none;
   border-radius: 5px;
-  border: ${(props) => (props.error ? "2px red solid" : "none")};
+  border: none;
+  box-shadow: ${(props) =>
+    props.error ? "inset 0 0 0 2px var(--error)" : "none"};
+  transition: box-shadow 0.3s;
   background: var(--white);
   padding: 0.8rem;
   margin-bottom: 2rem;
@@ -45,24 +53,27 @@ const FormTitle = styled.h1`
   font-size: 4rem;
   color: var(--white);
   padding-bottom: 3rem;
+  text-align: center;
 `;
 
 export default function AuthForm({
   type,
   onSubmit,
-  onPasswordChange,
+  onSenhaChange,
   onEmailChange,
   onUsernameChange,
-  errorEmail,
-  errorUsername,
-  errorPassword,
+  emailError,
+  usernameError,
+  senhaError,
 }) {
   return (
     <FormLayout action="" onSubmit={onSubmit}>
       <FormTitle>{type}</FormTitle>
-      <label htmlFor="email">email</label>
+      <label htmlFor="email">
+        email <Error>{emailError}</Error>
+      </label>
       <Input
-        error={errorEmail}
+        error={emailError}
         type="email"
         name="email"
         id="email"
@@ -71,9 +82,11 @@ export default function AuthForm({
       />
       {type === "criar conta" && (
         <>
-          <label htmlFor="username">username</label>
+          <label htmlFor="username">
+            username <Error>{usernameError}</Error>
+          </label>
           <Input
-            error={errorUsername}
+            error={usernameError}
             type="text"
             name="username"
             id="username"
@@ -82,13 +95,15 @@ export default function AuthForm({
           />
         </>
       )}
-      <label htmlFor="password">senha</label>
+      <label htmlFor="senha">
+        senha <Error>{senhaError}</Error>
+      </label>
       <Input
-        error={errorPassword}
+        error={senhaError}
         type="password"
-        name="password"
-        id="password"
-        onChange={onPasswordChange}
+        name="senha"
+        id="senha"
+        onChange={onSenhaChange}
         required
       />
       <Submit type="submit" value="">
