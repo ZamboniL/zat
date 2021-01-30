@@ -5,55 +5,51 @@ import MessageBar from "../../components/MessageBar";
 import Groups from "../../components/Groups";
 import { useState } from "react";
 import axios from "axios";
+import { authAndData, ensureAuth } from "../../lib/auth";
+import { getData } from "../../lib/getData";
 
-export default function User({ data, header }) {
-  const [message, setMessage] = useState("");
-  const handleMessageChange = (e) => setMessage(e.target.value);
+export default function User({ group, messages, user, config }) {
+  const [content, setContent] = useState("");
+  const handleMessageChange = (e) => setContent(e.target.value);
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
     e.target.messageBar.value = "";
-
-    // fetch("http://localhost:4000/api/message/new", {
-    //   method: "POST",
-    //   body: { content: message, group: data.group._id },
-    // });
-
-    const postData = { content: message, group: data.group._id };
+    const postData = { content, user, group: group._id };
     await axios
-      .post("http://localhost:4000/api/message/new", postData, header)
-      .then((response) => {
-        console.log(response);
+      .post("http://localhost:4000/api/message/new", postData, config)
+      .then((res) => {
+        console.log(res);
       })
-      .catch(
-        (err) => {
-          console.log(err.data);
-        },
-        { withCredentials: true }
-      );
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
     <ChatLayout>
       <Groups />
-      <Chat messages={data.group_messages} />
+      <Chat messages={messages} />
       <MessageBar
         onMessageChange={handleMessageChange}
         onMessageSubmit={handleMessageSubmit}
       />
-      <Members members={data.group.users} />
+      <Members members={group.users} />
     </ChatLayout>
   );
 }
 
-export async function getServerSideProps(ctx) {
-  const res = await fetch(
-    `http://localhost:4000/api/groups/601076970607f0ddc42602b0`
+export const getServerSideProps = async (ctx) => {
+  var userWithToken = await ensureAuth(ctx); // Validate User
+  const data = await getData(
+    "api/group/601076970607f0ddc42602b0",
+    userWithToken
   );
-
-  const data = await res.json();
-  var token = ctx.req.headers.cookie.toString().replace("connect.sid=", "");
-  console.log(token);
-  const header = { headers: { authorization: `Bearer ${token}` } };
-
-  return { props: { data, header } };
-}
+  return {
+    props: {
+      group: data.group,
+      messages: data.group_messages,
+      user: userWithToken.user,
+      config: userWithToken,
+    },
+  };
+};

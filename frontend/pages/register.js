@@ -3,50 +3,62 @@ import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { setCookie } from "nookies";
+import checkRegisterConditions from "../lib/checkRegisterConditions";
 
 export default function Login() {
   // user states and router
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
-  const [senha, setSenha] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   // error handling states
   const [emailError, setEmailError] = useState("");
   const [usernameError, setUsernameError] = useState("");
-  const [senhaError, setSenhaError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
 
   // get form values from child components AuthForm
   const handleEmailChange = (e) => setEmail(e.target.value);
   const handleUsernameChange = (e) => setUsername(e.target.value);
-  const handleSenhaChange = (e) => setSenha(e.target.value);
+  const handlePasswordChange = (e) => setPassword(e.target.value);
 
   // Get session from api and redirect user if everything is correct, else it displays a error for the user.
   const handleSubmit = (e) => {
     e.preventDefault();
+    const errs = checkRegisterConditions(email, username, password);
+    if (errs) {
+      setEmailError("");
+      setPasswordError("");
+      setUsernameError("");
+      if (errs.includes("Email")) setEmailError(errs);
+      if (errs.includes("Senha")) setPasswordError(errs);
+      if (errs.includes("Username")) setUsernameError(errs);
+    }
     axios
       .post("http://localhost:4000/api/auth/register", {
         email,
         username,
-        senha,
+        password,
       })
-      .then((response) => {
-        console.log(response);
-        if (response.status === 200) router.push("/user");
+      .then((res) => {
+        console.log(res);
+        // set auth cookie on user
+        if (res.status === 200) {
+          setCookie(null, "token", res.data.token, {
+            path: "/",
+            maxAge: 3600 * 24,
+            sameSite: true,
+          });
+          router.push("/user");
+        }
       })
       .catch((err) => {
-        const errors = err.response.data;
-
-        // Send the error messages to the child node
-        setEmailError(
-          errors.find((error) => error.includes("email")).replace(":", "")
-        );
-        setUsernameError(
-          errors.find((error) => error.includes("username")).replace(":", "")
-        );
-        setSenhaError(
-          errors.find((error) => error.includes("senha")).replace(":", "")
-        );
+        const errMessage = err.response.data.msg;
+        if (errMessage) {
+          if (errMessage.includes("Email"))
+            setEmailError(err.response.data.msg);
+        }
       });
   };
 
@@ -58,10 +70,10 @@ export default function Login() {
           onSubmit={handleSubmit}
           onEmailChange={handleEmailChange}
           onUsernameChange={handleUsernameChange}
-          onSenhaChange={handleSenhaChange}
+          onPasswordChange={handlePasswordChange}
           emailError={emailError}
           usernameError={usernameError}
-          senhaError={senhaError}
+          passwordError={passwordError}
         />
       </LoginContainer>
     </>

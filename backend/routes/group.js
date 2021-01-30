@@ -2,12 +2,13 @@ const express = require("express");
 const router = express.Router();
 const async = require("async");
 const ObjectId = require("mongoose").Types.ObjectId;
+const auth = require("../middleware/auth");
 
 // Require Models
 const Group = require("../models/group.model");
 const Messages = require("../models/message.model");
 
-router.get("/:id", function (req, res, next) {
+router.get("/:id", auth, function (req, res, next) {
   if (!ObjectId.isValid(req.params.id)) return Error({ status: 422 });
   async.parallel(
     {

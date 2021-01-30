@@ -18,7 +18,7 @@ router.post("/register", (req, res) => {
 
   // Check for existing user
   User.findOne({ email }).then((user) => {
-    if (user) return res.status(400).json({ msg: "User already exists" });
+    if (user) return res.status(400).json({ msg: "Email já cadastrado" });
 
     const newUser = new User({ username, email, password });
 
@@ -27,27 +27,32 @@ router.post("/register", (req, res) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {
         if (err) throw err;
         newUser.password = hash;
-        newUser.save().then((user) => {
-          jwt.sign(
-            { id: user.id },
-            process.env.JWT_SECRET,
-            {
-              expiresIn: 3600 * 24,
-            },
-            (err, token) => {
-              if (err) throw err;
+        newUser
+          .save()
+          .then((user) => {
+            jwt.sign(
+              { id: user.id },
+              process.env.JWT_SECRET,
+              {
+                expiresIn: 3600 * 24,
+              },
+              (err, token) => {
+                if (err) throw err;
 
-              res.json({
-                token,
-                user: {
-                  id: user.id,
-                  username: user.username,
-                  email: user.email,
-                },
-              });
-            }
-          );
-        });
+                res.json({
+                  token,
+                  user: {
+                    id: user.id,
+                    username: user.username,
+                    email: user.email,
+                  },
+                });
+              }
+            );
+          })
+          .catch((err) => {
+            return res.status(400).send(err.msg);
+          });
       });
     });
   });
@@ -61,16 +66,16 @@ router.post("/login", (req, res) => {
 
   // Validation
   if (!email || !password) {
-    return res.status(400).json({ msg: "Please enter all fields" });
+    return res.status(400).json({ msg: "Preencha todos os campos" });
   }
 
   // Check for existing user
   User.findOne({ email }).then((user) => {
-    if (!user) return res.status(400).json({ msg: "User does not exist" });
+    if (!user) return res.status(400).json({ msg: "Email não cadastrado" });
 
     // Validate password sent with hash generated previously
     bcrypt.compare(password, user.password).then((isMatch) => {
-      if (!isMatch) return res.status(400).json({ msg: "Invalid credentials" });
+      if (!isMatch) return res.status(400).json({ msg: "Senha incorreta" });
 
       jwt.sign(
         { id: user.id },

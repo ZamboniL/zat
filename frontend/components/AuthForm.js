@@ -59,12 +59,12 @@ const FormTitle = styled.h1`
 export default function AuthForm({
   type,
   onSubmit,
-  onSenhaChange,
+  onPasswordChange,
   onEmailChange,
   onUsernameChange,
   emailError,
   usernameError,
-  senhaError,
+  passwordError,
 }) {
   return (
     <FormLayout action="" onSubmit={onSubmit}>
@@ -95,15 +95,15 @@ export default function AuthForm({
           />
         </>
       )}
-      <label htmlFor="senha">
-        senha <Error>{senhaError}</Error>
+      <label htmlFor="password">
+        password <Error>{passwordError}</Error>
       </label>
       <Input
-        error={senhaError}
+        error={passwordError}
         type="password"
-        name="senha"
-        id="senha"
-        onChange={onSenhaChange}
+        name="password"
+        id="password"
+        onChange={onPasswordChange}
         required
       />
       <Submit type="submit" value="">

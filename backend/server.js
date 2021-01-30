@@ -37,16 +37,7 @@ app.use(
     credentials: true,
   })
 );
-app.use(cookieParser());
 app.use(express.json());
-app.use(
-  session({
-    secret: "keyboard cat",
-    resave: true,
-    saveUninitialized: true,
-    cookie: { maxAge: 8 * 60 * 60 * 1000 },
-  })
-);
 
 // Routes
 const authRouter = require("./routes/auth");
@@ -54,7 +45,7 @@ const groupRouter = require("./routes/group");
 const messageRouter = require("./routes/message");
 
 app.use("/api/auth", authRouter);
-app.use("/api/groups", groupRouter);
+app.use("/api/group", groupRouter);
 app.use("/api/message", messageRouter);
 
 app.get("/", (req, res) => {
