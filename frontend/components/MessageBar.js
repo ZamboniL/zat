@@ -1,47 +1,42 @@
 import styled from "styled-components";
 
-const Form = styled.form`
-  grid-row: 2 / 3;
-  grid-column: 2 / 3;
-  padding: 1rem;
-`;
-
-const Input = styled.input`
-  width: 90%;
-  border-radius: 10px;
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  font-size: 1.5rem;
-  padding: 1rem;
-  background: rgba(0, 0, 0, 0.15);
-  color: white;
-  border: none;
-  outline: none;
-`;
-
-const Send = styled.button`
-  font-size: 1.5rem;
-  padding: 1rem;
-  color: white;
-  background: rgba(0, 0, 0, 0.15);
-  border: none;
-  outline: none;
-  border-radius: 10px;
-  border-bottom-left-radius: 0;
-  border-top-left-radius: 0;
-  cursor: pointer;
-  transition: background 0.15s ease-in-out;
-
-  &:hover {
-    background: rgba(0, 0, 0, 0.25);
-  }
-`;
-
 export default function MessageBar({ onMessageChange, onMessageSubmit }) {
   return (
-    <Form onSubmit={onMessageSubmit}>
-      <Input type="text" name="messageBar" onChange={onMessageChange} />
-      <Send>Send</Send>
+    <Form autoComplete="off" onSubmit={onMessageSubmit}>
+      <Input
+        type="text"
+        name="messageBar"
+        onChange={onMessageChange}
+        placeholder="conversar..."
+      />
     </Form>
   );
 }
+
+const Form = styled.form`
+  padding: 1rem;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media (min-width: 760px) {
+    grid-column: 2 / 3;
+    padding: unset;
+  }
+`;
+
+const Input = styled.input`
+  background: var(--primary-color);
+  color: var(--white);
+  font-size: 1rem;
+  padding: 0.8rem;
+  border-radius: 10px;
+  width: 90%;
+
+  ::placeholder {
+    font-size: 0.8rem;
+  }
+  @media (min-width: 760px) {
+    background: var(--primary-shade);
+  }
+`;

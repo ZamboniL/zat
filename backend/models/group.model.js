@@ -9,11 +9,14 @@ var GroupSchema = new Schema({
     required: [true, "can't be blank"],
     index: true,
   },
+  disc: {
+    type: String,
+  },
   canais: {
     type: [String],
     default: ["new-group"],
   },
-  users: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+  users: { type: [mongoose.Schema.Types.ObjectId], ref: "User" },
 });
 
 const Group = mongoose.model("Group", GroupSchema);

@@ -9,11 +9,15 @@ body {
 
 body {
   height: 100vh;
-  --white: #f1f3f4;
+  --white: #c6ced2;
+  --white-shade: #91979b;
   --black: #181b1d;
-  --primary-color: #2b2d42;
+  --primary-color: #232536;
+  --primary-shade: #1c1e2b;
+  --primary-dark: #151822;
   --secondary-color: #2b4240;
   --error: #ff7272;
+  color: var(--white);
 }
 
 a {
@@ -25,4 +29,13 @@ a {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+}
+
+input {
+  border: none;
+  outline: none;
+}
+
+#__next {
+  height: 100%;
 }

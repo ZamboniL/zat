@@ -54,20 +54,8 @@ app.get("/", (req, res) => {
 
 app.use(express.static(__dirname + "/public"));
 
-// let interval;
-
-// io.on("connection", (socket) => {
-//   const greetings = "hi user";
-//   console.log(greetings);
-//   if (interval) {
-//     clearInterval(interval);
-//   }
-//   interval = setInterval(() => {
-//     let number = Math.random() * (1000 - 1) + 1;
-//     socket.emit("new number", number);
-//   }, 1000);
-// });
-
+let interval;
+app.locals.io = io;
 // let usernameList = [];
 // let personList = [];
 // io.on("connection", (socket) => {

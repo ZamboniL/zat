@@ -1,6 +1,7 @@
 import axios from "axios";
 import nookies from "nookies";
 
+// Check for user authentication and returns his token + his user object
 export const isAuthenticated = async (ctx) => {
   const cookie = nookies.get(ctx).token;
   if (!cookie) return false;
@@ -14,6 +15,7 @@ export const isAuthenticated = async (ctx) => {
   }
 };
 
+// Ensures that if the user is not authenticated he will be redirected to /login path
 export const ensureAuth = async (ctx) => {
   let config = await isAuthenticated(ctx);
   if (!config) {

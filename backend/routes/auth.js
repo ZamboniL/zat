@@ -20,7 +20,12 @@ router.post("/register", (req, res) => {
   User.findOne({ email }).then((user) => {
     if (user) return res.status(400).json({ msg: "Email já cadastrado" });
 
-    const newUser = new User({ username, email, password });
+    const newUser = new User({
+      username,
+      email,
+      password,
+      picture_filename: "/images/userProfile/default.jpg",
+    });
 
     // Password hash generation
     bcrypt.genSalt(10, (err, salt) => {

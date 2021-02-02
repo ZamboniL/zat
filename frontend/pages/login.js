@@ -28,7 +28,6 @@ export default function Login() {
         password,
       })
       .then((res) => {
-
         // set auth cookie on user
         if (res.status === 200) {
           setCookie(null, "token", res.data.token, {
@@ -43,10 +42,12 @@ export default function Login() {
         // Send the error message to the child node
         setEmailError("");
         setPasswordError("");
-        if (err.response.data.msg.includes("email"))
-          setEmailError(err.response.data.msg);
-        if (err.response.data.msg.includes("Senha"))
-          setPasswordError(err.response.data.msg);
+        if (err.response) {
+          if (err.response.data.msg.includes("email"))
+            setEmailError(err.response.data.msg);
+          if (err.response.data.msg.includes("Senha"))
+            setPasswordError(err.response.data.msg);
+        }
       });
   };
 
