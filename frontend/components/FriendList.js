@@ -1,14 +1,14 @@
 import styled from "styled-components";
-import { FaPlus } from "react-icons/fa";
+import { FaUserPlus } from "react-icons/fa";
 import Image from "next/image";
 
-export const GroupList = ({ category }) => {
+export const UserList = ({ category }) => {
   return (
     <Container category={category}>
       <FlexTitle>
-        <h1>Grupos</h1>
+        <h1>Amigos</h1>
         <PlusButton>
-          <FaPlus />
+          <FaUserPlus />
         </PlusButton>
       </FlexTitle>
       <List>
@@ -88,8 +88,9 @@ const Container = styled.div`
   transition: transform 0.5s ease-in-out, opacity 0.2s ease-in-out;
   transform-origin: 0%;
   transform: ${({ category }) =>
-    category === "Grupos" ? "translateX(0px)" : "translateX(1000px)"};
-  opacity: ${({ category }) => (category === "Grupos" ? "1" : "0")};
+    category === "Amigos" ? "translateX(0px)" : "translateX(1000px)"};
+  opacity: ${({ category }) => (category === "Amigos" ? "1" : "0")};
+  position: absolute;
   @media (min-width: 760px) {
     padding: 1rem;
     grid-column: 2 /3;

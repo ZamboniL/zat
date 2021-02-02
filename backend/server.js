@@ -24,6 +24,7 @@ mongoose.connect(uri, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useUnifiedTopology: true,
+  useFindAndModify: false,
 });
 const connection = mongoose.connection;
 connection.once("open", () => {
@@ -41,10 +42,12 @@ app.use(express.json());
 
 // Routes
 const authRouter = require("./routes/auth");
+const userRouter = require("./routes/user");
 const groupRouter = require("./routes/group");
 const messageRouter = require("./routes/message");
 
 app.use("/api/auth", authRouter);
+app.use("/api/user", userRouter);
 app.use("/api/group", groupRouter);
 app.use("/api/message", messageRouter);
 

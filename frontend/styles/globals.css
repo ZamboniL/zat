@@ -9,8 +9,9 @@ body {
 
 body {
   height: 100vh;
-  --white: #c6ced2;
+  --white: #dce5e9;
   --white-shade: #91979b;
+  --white-dark: #777c80;
   --black: #181b1d;
   --primary-color: #232536;
   --primary-shade: #1c1e2b;

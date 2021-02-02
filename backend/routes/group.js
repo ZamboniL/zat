@@ -7,7 +7,32 @@ const auth = require("../middleware/auth");
 // Require Models
 const Group = require("../models/group.model");
 const Messages = require("../models/message.model");
-const User = require("../models/user.model");
+const randomGroupTag = require("../helpers/randomGroupTag");
+
+// @route   /api/group/new
+// @desc    Create new group
+// @access  Private
+router.post("/new", auth, async function (req, res, next) {
+  const { title, desc, user } = req.body;
+
+  // Validation
+  if (!title || !desc || !user) {
+    return res.status(400).json({ msg: "Please enter all fields" });
+  }
+
+  const tag = await randomGroupTag();
+
+  const newGroup = new Group({
+    title,
+    desc,
+    tag,
+    users: [user._id],
+  });
+
+  newGroup.save().then((group) => {
+    res.json(group);
+  });
+});
 
 // @route   /api/group/:id
 // @desc    Get group info

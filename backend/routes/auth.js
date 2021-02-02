@@ -4,11 +4,12 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const auth = require("../middleware/auth");
+const randomTag = require("../helpers/randomUserTag");
 
 // @route   POST /api/auth/register
 // @desc    Register new user
 // @access  Public
-router.post("/register", (req, res) => {
+router.post("/register", async (req, res) => {
   const { username, email, password } = req.body;
 
   // Validation
@@ -17,16 +18,16 @@ router.post("/register", (req, res) => {
   }
 
   // Check for existing user
-  User.findOne({ email }).then((user) => {
+  User.findOne({ email }).then(async (user) => {
     if (user) return res.status(400).json({ msg: "Email já cadastrado" });
-
+    const tag = await randomTag();
     const newUser = new User({
       username,
       email,
       password,
       picture_filename: "/images/userProfile/default.jpg",
+      tag,
     });
-
     // Password hash generation
     bcrypt.genSalt(10, (err, salt) => {
       bcrypt.hash(newUser.password, salt, (err, hash) => {

@@ -5,17 +5,17 @@ const Schema = mongoose.Schema;
 var GroupSchema = new Schema({
   title: {
     type: String,
-    unique: true,
     required: [true, "can't be blank"],
     index: true,
   },
-  disc: {
+  desc: {
     type: String,
   },
   canais: {
     type: [String],
     default: ["new-group"],
   },
+  tag: { type: String, required: true, unique: true },
   users: { type: [mongoose.Schema.Types.ObjectId], ref: "User" },
 });
 

@@ -1,13 +1,14 @@
 import styled from "styled-components";
 
-export const Body = ({ children }) => {
-  return <Container>{children}</Container>;
+export const Body = ({ children, full }) => {
+  return <Container full={full}>{children}</Container>;
 };
 
 const Container = styled.section`
-  grid-row: 2 / 3;
+  grid-row: ${({ full }) => (full ? "2 / 4" : "2 / 3")};
   background: var(--primary-color);
   display: flex;
+  position: relative;
 
   @media (min-width: 760px) {
     display: grid;

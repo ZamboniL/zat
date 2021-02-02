@@ -16,6 +16,7 @@ import { ProfilePicture } from "../../components/ProfilePicture";
 import { ReturnArrow } from "../../components/ReturnArrow";
 import { GroupChats } from "../../components/GroupChats";
 import { io } from "socket.io-client";
+import { Title } from "../../components/Title";
 
 export default function Group({ group, messages, user, config }) {
   // Message content
@@ -54,10 +55,7 @@ export default function Group({ group, messages, user, config }) {
     <Layout>
       <Nav>
         <ReturnArrow />
-        <header>
-          <h1>{group.title}</h1>
-          <Desc>{group.desc}</Desc>
-        </header>
+        <Title title={group.title} desc={group.desc} />
         <Hamburger open={open} setOpen={setOpen} />
         <Menu open={open} setOpen={setOpen} />
       </Nav>
@@ -102,15 +100,7 @@ export const getServerSideProps = async (ctx) => {
   };
 };
 
-const Desc = styled.span`
-  font-size: 0.8rem;
-  display: block;
-  width: 100%;
-  padding-left: 1rem;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-`;
+
 
 const UserArea = styled.section`
   background: var(--primary-dark);

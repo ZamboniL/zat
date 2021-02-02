@@ -16,12 +16,15 @@ export const ReturnArrow = () => {
 };
 
 const Container = styled.div`
-  height: 100%;
-  background: var(--primary-shade);
-  grid-column: 1 / 2;
-  display: flex;
-  align-items: center;
-  padding: 1rem;
+  display: none;
+  @media (min-width: 760px) {
+    height: 100%;
+    background: var(--primary-shade);
+    grid-column: 1 / 2;
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+  }
 `;
 
 const ReturnButton = styled.button`

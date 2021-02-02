@@ -13,6 +13,8 @@ const Container = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  position: relative;
+  z-index: 1;
 
   @media (min-width: 760px) {
     padding: unset;
@@ -20,20 +22,6 @@ const Container = styled.nav`
     grid-gap: 1rem;
     grid-template-columns: 20% 80%;
     background: var(--primary-color);
-
-    header {
-      grid-column: 2 / 3;
-      display: flex;
-      align-items: center;
-      vertical-align: middle;
-    }
-    h1 {
-      display: block;
-      width: fit-content;
-      padding: 0.2rem 0.5rem;
-      border-radius: 10px;
-      background: var(--primary-shade);
-    }
   }
   @media (min-width: 1100px) {
     grid-template-columns: 20% 60% 20%;
