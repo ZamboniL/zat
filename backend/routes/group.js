@@ -27,6 +27,7 @@ router.post("/new", auth, async function (req, res, next) {
     desc,
     tag,
     users: [user._id],
+    picture_filename: "/images/groupProfile/default.jpg",
   });
 
   newGroup.save().then((group) => {
@@ -71,9 +72,9 @@ router.get("/user/:user_id", auth, (req, res) => {
   if (!ObjectId.isValid(req.params.user_id)) return Error({ status: 422 });
   console.log(req.params.user_id);
   // User.findById(req.params.user_id).then((user) => res.json(user));
-  Group.find({ users: req.params.user_id }).exec((group) => {
-    console.log(group);
-    res.send(group);
+  Group.find({ users: req.params.user_id }).exec((err, group) => {
+    if (err) throw err;
+    res.json(group);
   });
 });
 

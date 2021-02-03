@@ -1,7 +1,6 @@
 import styled from "styled-components";
 
 export const GroupChats = ({ channels }) => {
-  console.log(channels);
   return (
     <Container>
       <h2>Chats</h2>

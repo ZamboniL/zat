@@ -1,4 +1,5 @@
 const auth = require("../middleware/auth");
+const Group = require("../models/group.model");
 const User = require("../models/user.model");
 const router = require("express").Router();
 
@@ -26,6 +27,14 @@ router.post("/new_friend", auth, (req, res) => {
       );
     }
   });
+});
+
+router.get("/info/:id", auth, async (req, res) => {
+  const { id } = req.params;
+  console.log;
+  const user = await User.findById(id).populate("friends", "-password");
+  const groups = await Group.find({ users: id });
+  res.json({ user, groups });
 });
 
 module.exports = router;

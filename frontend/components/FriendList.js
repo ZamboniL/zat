@@ -2,82 +2,34 @@ import styled from "styled-components";
 import { FaUserPlus } from "react-icons/fa";
 import Image from "next/image";
 
-export const UserList = ({ category }) => {
+export const UserList = ({ friends, category, modal }) => {
   return (
     <Container category={category}>
       <FlexTitle>
         <h1>Amigos</h1>
-        <PlusButton>
+        <PlusButton
+          onClick={() => {
+            modal(true);
+          }}
+        >
           <FaUserPlus />
         </PlusButton>
       </FlexTitle>
       <List>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
+        {friends.map((friend) => {
+          return (
+            <GroupItem>
+              <Image
+                src={"/images/groupProfile/fernando.png"}
+                height="75px"
+                width="75px"
+              />
+              <section>
+                <h2>{friend.username}</h2>
+              </section>
+            </GroupItem>
+          );
+        })}
       </List>
     </Container>
   );
@@ -88,7 +40,7 @@ const Container = styled.div`
   transition: transform 0.5s ease-in-out, opacity 0.2s ease-in-out;
   transform-origin: 0%;
   transform: ${({ category }) =>
-    category === "Amigos" ? "translateX(0px)" : "translateX(1000px)"};
+    category === "Amigos" ? "translateX(0px)" : "translateX(2000px)"};
   opacity: ${({ category }) => (category === "Amigos" ? "1" : "0")};
   position: absolute;
   @media (min-width: 760px) {

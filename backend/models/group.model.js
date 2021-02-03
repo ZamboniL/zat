@@ -15,6 +15,7 @@ var GroupSchema = new Schema({
     type: [String],
     default: ["new-group"],
   },
+  picture_filename: { type: String, required: true },
   tag: { type: String, required: true, unique: true },
   users: { type: [mongoose.Schema.Types.ObjectId], ref: "User" },
 });

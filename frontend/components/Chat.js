@@ -1,18 +1,8 @@
-import { useState, useEffect, useRef } from "react";
-import { io } from "socket.io-client";
+import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import Messages from "./Messages";
 
 export default function Chat({ messages }) {
-  const [newMessage, setNewMessage] = useState([{}]);
-
-  useEffect(() => {
-    const socket = io("http://localhost:4000");
-    socket.on("new message", (message) => {
-      setNewMessage((newMessage) => [...newMessage, message]);
-    });
-  }, []);
-
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -21,11 +11,11 @@ export default function Chat({ messages }) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [newMessage]);
+  }, [messages]);
 
   return (
     <List>
-      <Messages messageHistoryArray={messages} newMessagesArray={newMessage} />
+      <Messages messageHistoryArray={messages} />
       <div ref={messagesEndRef} />
     </List>
   );

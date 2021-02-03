@@ -50,10 +50,12 @@ const Switcher = styled.ul`
 
   li {
     font-size: 1.2rem;
+    font-weight: bold;
     padding: 0.4rem;
     border-radius: 10px;
     margin-right: 2rem;
     transition: background 0.2s ease-in-out;
+    cursor: pointer;
   }
 `;
 

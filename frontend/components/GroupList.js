@@ -2,82 +2,35 @@ import styled from "styled-components";
 import { FaPlus } from "react-icons/fa";
 import Image from "next/image";
 
-export const GroupList = ({ category }) => {
+export const GroupList = ({ groups, category, modal }) => {
   return (
     <Container category={category}>
       <FlexTitle>
         <h1>Grupos</h1>
-        <PlusButton>
+        <PlusButton
+          onClick={() => {
+            modal(true);
+          }}
+        >
           <FaPlus />
         </PlusButton>
       </FlexTitle>
       <List>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
-        <GroupItem>
-          <Image
-            src={"/images/groupProfile/fernando.png"}
-            height="75px"
-            width="75px"
-          />
-          <section>
-            <h2>hahahahahha</h2>
-            <h3>hihihihhi</h3>
-          </section>
-        </GroupItem>
+        {groups.map((group) => {
+          return (
+            <GroupItem>
+              <Image
+                src={"/images/groupProfile/fernando.png"}
+                height="75px"
+                width="75px"
+              />
+              <section>
+                <h2>{group.title}</h2>
+                <h3>{group.desc}</h3>
+              </section>
+            </GroupItem>
+          );
+        })}
       </List>
     </Container>
   );

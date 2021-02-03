@@ -1,36 +1,31 @@
-import Chat from "../../components/Chat";
-import Members from "../../components/Members";
-import MessageBar from "../../components/MessageBar";
+import Chat from "../../../components/Chat";
+import Members from "../../../components/Members";
+import MessageBar from "../../../components/MessageBar";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { ensureAuth } from "../../lib/auth";
-import { getData } from "../../lib/getData";
-import { Layout } from "../../components/chat/Layout";
-import { Nav } from "../../components/chat/Nav";
-import { Body } from "../../components/chat/Body";
-import { Bottom } from "../../components/chat/Bottom";
+import { ensureAuth } from "../../../lib/auth";
+import { getData } from "../../../lib/getData";
+import { Layout } from "../../../components/chat/Layout";
+import { Nav } from "../../../components/chat/Nav";
+import { Body } from "../../../components/chat/Body";
+import { Bottom } from "../../../components/chat/Bottom";
 import styled from "styled-components";
-import { Hamburger } from "../../components/menu/Hamburguer";
-import Menu from "../../components/menu/Menu";
-import { ProfilePicture } from "../../components/ProfilePicture";
-import { ReturnArrow } from "../../components/ReturnArrow";
-import { GroupChats } from "../../components/GroupChats";
-import { io } from "socket.io-client";
-import { Title } from "../../components/Title";
+import { Hamburger } from "../../../components/menu/Hamburguer";
+import Menu from "../../../components/menu/Menu";
+import { ProfilePicture } from "../../../components/ProfilePicture";
+import { ReturnArrow } from "../../../components/ReturnArrow";
+import { GroupChats } from "../../../components/GroupChats";
+import { Title } from "../../../components/Title";
+import { socket } from "../../../service/socket";
 
 export default function Group({ group, messages, user, config }) {
+  useEffect(() => {
+    console.log("gaarf");
+    socket.emit("in group", group.tag);
+  }, []);
   // Message content
   const [messagesArray, setMessages] = useState(messages);
-  useEffect(() => {
-    const socket = io("http://localhost:4000");
-    socket.on("new message", (message) => {
-      const getNewMessages = async function () {
-        setMessages(
-          await getData("api/message/group/601076970607f0ddc42602b0", config)
-        );
-      };
-    });
-  }, []);
+  useEffect(() => {}, []);
   const [content, setContent] = useState("");
   const handleMessageChange = (e) => setContent(e.target.value);
   const handleMessageSubmit = async (e) => {
@@ -40,12 +35,19 @@ export default function Group({ group, messages, user, config }) {
     await axios
       .post("http://localhost:4000/api/message/new", postData, config)
       .then((res) => {
-        console.log(res);
+        socket.emit("new message", res.data);
       })
       .catch((err) => {
         console.log(err.response);
       });
   };
+
+  useEffect(() => {
+    console.log("ggaa");
+    socket.on("get new messages", (message) => {
+      setMessages((newMessage) => [...newMessage, message]);
+    });
+  }, []);
 
   // Open state for the hamburguer menu on mobile
   const [open, setOpen] = useState(false);
@@ -86,10 +88,8 @@ export default function Group({ group, messages, user, config }) {
 
 export const getServerSideProps = async (ctx) => {
   var userWithToken = await ensureAuth(ctx); // Validate User
-  const data = await getData(
-    "api/group/601076970607f0ddc42602b0",
-    userWithToken
-  );
+  const { id } = ctx.query;
+  const data = await getData(`api/group/${id}`, userWithToken);
   return {
     props: {
       group: data.group,
@@ -99,8 +99,6 @@ export const getServerSideProps = async (ctx) => {
     },
   };
 };
-
-
 
 const UserArea = styled.section`
   background: var(--primary-dark);

@@ -6,9 +6,6 @@ const Messages = ({ messageHistoryArray, newMessagesArray }) => {
       {messageHistoryArray.map((message) => {
         return createMessage(message);
       })}
-      {newMessagesArray.map((message) => {
-        return createMessage(message);
-      })}
     </>
   );
 };

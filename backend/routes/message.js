@@ -16,12 +16,10 @@ router.post("/new", auth, (req, res) => {
   newMessage
     .save()
     .then(() => {
-      const io = req.app.locals.io;
       Message.findById(newMessage._id)
         .populate("user", "-password")
         .then((message) => {
-          io.sockets.emit("new message", message);
-          res.send("Message created succesfully.");
+          res.json(message);
         });
     })
     .catch((err) => {
@@ -38,14 +36,17 @@ router.post("/new", auth, (req, res) => {
     });
 });
 
-// @route   /api/message/group/group_id
+// @route   /api/message/group/:group_id
 // @desc    Get group messages
 // @access  Private
-router.get("/group/:group_id", auth, (req, res) => {
+router.get("/group/:group_id", auth, async (req, res) => {
   if (!ObjectId.isValid(req.params.group_id)) return Error({ status: 422 });
   Message.find({ group: req.params.group_id })
     .populate("user", "-password")
-    .exec((messages) => res.json(messages));
+    .exec((err, result) => {
+      if (err) throw err;
+      res.json(result);
+    });
 });
 
 module.exports = router;

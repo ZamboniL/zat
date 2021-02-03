@@ -29,8 +29,8 @@ var UserSchema = new Schema(
       minlength: [6, "precisa ser de no minimo 6 caracteres."],
     },
     picture_filename: { type: String, required: true },
-    tag: {type: String, required: true, unique: true, },
-    friends: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    tag: { type: String, required: true, unique: true },
+    friends: { type: [mongoose.Schema.Types.ObjectId], ref: "User" },
   },
   { timestamps: true }
 );

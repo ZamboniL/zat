@@ -4,8 +4,6 @@ const http = require("http").createServer(app);
 const mongoose = require("mongoose");
 require("dotenv").config();
 const cors = require("cors");
-const session = require("express-session");
-const cookieParser = require("cookie-parser");
 const io = require("socket.io")(http, {
   cors: {
     origin: "http://localhost:3000",
@@ -57,11 +55,19 @@ app.get("/", (req, res) => {
 
 app.use(express.static(__dirname + "/public"));
 
-let interval;
-app.locals.io = io;
 // let usernameList = [];
 // let personList = [];
-// io.on("connection", (socket) => {
+io.sockets.on("connection", (socket) => {
+  console.log("Guu");
+  var currentRoom;
+  socket.on("in group", (tag) => {
+    currentRoom = tag;
+    socket.join(currentRoom);
+  });
+  socket.on("new message", (message) => {
+    io.to(currentRoom).emit("get new messages", message);
+  });
+});
 //   let currentPerson;
 //   socket.on("username select", (person) => {
 //     currentPerson = person;

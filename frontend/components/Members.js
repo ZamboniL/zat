@@ -49,7 +49,7 @@ const Title = styled.h2`
   display: block;
   width: fit-content;
 
-  padding: 0.2rem 0;
+  padding: 0.2rem 0.5rem;
   border-radius: 10px;
   align-items: center;
 `;

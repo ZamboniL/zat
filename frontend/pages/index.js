@@ -1,4 +1,4 @@
-import { Body } from "../components/chat/Center";
+import { Body } from "../components/chat/Body";
 import { Layout } from "../components/chat/Layout";
 import { Bottom } from "../components/chat/Bottom";
 import { Nav } from "../components/chat/Nav";
