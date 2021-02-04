@@ -8,6 +8,7 @@ const auth = require("../middleware/auth");
 const Group = require("../models/group.model");
 const Messages = require("../models/message.model");
 const randomGroupTag = require("../helpers/randomGroupTag");
+const User = require("../models/user.model");
 
 // @route   /api/group/new
 // @desc    Create new group
@@ -38,31 +39,21 @@ router.post("/new", auth, async function (req, res, next) {
 // @route   /api/group/:id
 // @desc    Get group info
 // @access  Private
-router.get("/:id", auth, function (req, res, next) {
+router.get("/:id", auth, async function (req, res, next) {
   if (!ObjectId.isValid(req.params.id)) return Error({ status: 422 });
-  async.parallel(
-    {
-      group: (callback) => {
-        Group.findById(req.params.id)
-          .populate("users", "-senha")
-          .exec(callback);
-      },
-      group_messages: (callback) => {
-        Messages.find({ group: req.params.id })
-          .populate("user", "-password")
-          .exec(callback);
-      },
-    },
-    (err, results) => {
-      if (err) return next(err);
-      if (results.group == null) {
-        var err = new Error("Grupo não encontrado");
-        err.status = 404;
-        return next(err);
-      }
-      res.json(results);
-    }
+  const group = await Group.findById(req.params.id).populate({
+    path: "users",
+    model: "User",
+  });
+  const group_messages = await Messages.find({ group: req.params.id }).populate(
+    "user"
   );
+  if (group == null) {
+    var err = new Error("Grupo não encontrado");
+    err.status = 404;
+    return next(err);
+  }
+  res.json({ group, group_messages });
 });
 
 // @route   /api/group/user/:user_id
@@ -75,6 +66,32 @@ router.get("/user/:user_id", auth, (req, res) => {
   Group.find({ users: req.params.user_id }).exec((err, group) => {
     if (err) throw err;
     res.json(group);
+  });
+});
+
+// @route   /api/group/new_user
+// @desc    Add a new user to the group
+// @access  Private
+router.post("/new_user", auth, (req, res) => {
+  const tag = req.body.tag;
+  const groupId = req.body.groupId;
+  User.findOne({ tag }, async function (err, target) {
+    if (err) throw err;
+    if (!target) res.status(400).send("Usuário não encontrado");
+    if (target) {
+      const update = { $addToSet: { users: target._id } };
+      Group.findOneAndUpdate(
+        { _id: groupId },
+        update,
+        {
+          new: true,
+        },
+        (err, group) => {
+          if (err) throw err;
+          return res.json(target);
+        }
+      );
+    }
   });
 });
 

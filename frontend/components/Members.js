@@ -1,10 +1,14 @@
 import styled from "styled-components";
+import { AddButton } from "./AddButton";
 import { ProfilePicture } from "./ProfilePicture";
 
-export default function Members({ members }) {
+export default function Members({ members, onClick }) {
   return (
     <Container>
-      <Title>Membros</Title>
+      <header>
+        <Title>Membros</Title>
+        <AddButton onClick={onClick} />
+      </header>
       <MemberList>
         {members.map((member) => {
           return (
@@ -42,14 +46,26 @@ const Container = styled.section`
   @media (min-width: 1100px) {
     grid-column: 3 / 4;
   }
+
+  header {
+    display: flex;
+    flex-direction: column;
+    @media (min-width: 1100px) {
+      flex-direction: unset;
+      align-items: center;
+      justify-content: space-between;
+    }
+  }
 `;
 
 const Title = styled.h2`
   background: var(--primary-color);
   display: block;
   width: fit-content;
+  font-size: 1.25rem;
 
   padding: 0.2rem 0.5rem;
+  margin-right: 1rem;
   border-radius: 10px;
   align-items: center;
 `;

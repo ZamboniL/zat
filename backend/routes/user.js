@@ -22,7 +22,7 @@ router.post("/new_friend", auth, (req, res) => {
         },
         (err, user) => {
           if (err) throw err;
-          return res.json(user);
+          return res.json(target);
         }
       );
     }

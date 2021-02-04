@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { FaPlus } from "react-icons/fa";
 import Image from "next/image";
+import Link from "next/link";
+import List from "./styledComponents/List";
 
 export const GroupList = ({ groups, category, modal }) => {
   return (
@@ -18,17 +20,19 @@ export const GroupList = ({ groups, category, modal }) => {
       <List>
         {groups.map((group) => {
           return (
-            <GroupItem>
-              <Image
-                src={"/images/groupProfile/fernando.png"}
-                height="75px"
-                width="75px"
-              />
-              <section>
-                <h2>{group.title}</h2>
-                <h3>{group.desc}</h3>
-              </section>
-            </GroupItem>
+            <Link href={`/user/group/${group._id}`}>
+              <GroupItem>
+                <Image
+                  src={"/images/groupProfile/fernando.png"}
+                  height="75px"
+                  width="75px"
+                />
+                <section>
+                  <h2>{group.title}</h2>
+                  <h3>{group.desc}</h3>
+                </section>
+              </GroupItem>
+            </Link>
           );
         })}
       </List>
@@ -80,20 +84,14 @@ const PlusButton = styled.button`
   }
 `;
 
-const List = styled.ul`
-  list-style: none;
-  overflow-y: scroll;
-  height: 100%;
-  @media (min-width: 760px) {
-    width: 90%;
-  }
-`;
+
 const GroupItem = styled.li`
   padding: 1rem;
   display: flex;
   width: 100%;
   overflow-x: hidden;
   transition: background 0.2s ease-in-out;
+  cursor: pointer;
 
   section {
     padding-left: 0.5rem;

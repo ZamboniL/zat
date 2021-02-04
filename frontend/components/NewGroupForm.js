@@ -1,10 +1,41 @@
+import image from "next/image";
+import { useEffect, useState } from "react";
 import styled from "styled-components";
+import ImageInput from "./ImageInput";
 
 export const NewGroupForm = ({ onSubmit, onTitleChange, onDescChange }) => {
+  const [file, setFile] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const handleImageChange = (e) => {
+    e.preventDefault();
+    if (!e.target.files || e.target.files.length === 0) {
+      setFile(undefined);
+      return;
+    }
+    // I've kept this example simple by using the first image instead of multiple
+    setFile(e.target.files[0]);
+  };
+  useEffect(() => {
+    if (!file) {
+      setImagePreview(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(file);
+    setImagePreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl);
+  }, [file]);
+  console.log(file, imagePreview);
   return (
     <Container>
       <Title>Crie um novo grupo</Title>
+
       <GroupForm onSubmit={onSubmit}>
+        <FlexCenter>
+          <ImageInput
+            imagePreview={imagePreview}
+            onChange={(e) => handleImageChange(e)}
+          />
+        </FlexCenter>
         <label htmlFor="title">Nome</label>
         <input
           type="text"
@@ -47,7 +78,7 @@ const GroupForm = styled.form`
   padding: 2rem;
   font-size: 1.2rem;
   justify-content: center;
-  input,
+  input[type="text"],
   button {
     border: 2px solid;
     border-radius: 5px;
@@ -61,4 +92,9 @@ const GroupForm = styled.form`
     padding: 1rem;
     margin: 2rem 0;
   }
+`;
+const FlexCenter = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

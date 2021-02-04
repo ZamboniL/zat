@@ -1,19 +1,19 @@
 import styled from "styled-components";
-import { FaUserPlus } from "react-icons/fa";
+
 import Image from "next/image";
+import { AddButton } from "./AddButton";
+import List from "./styledComponents/List";
 
 export const UserList = ({ friends, category, modal }) => {
   return (
     <Container category={category}>
       <FlexTitle>
         <h1>Amigos</h1>
-        <PlusButton
+        <AddButton
           onClick={() => {
             modal(true);
           }}
-        >
-          <FaUserPlus />
-        </PlusButton>
+        />
       </FlexTitle>
       <List>
         {friends.map((friend) => {
@@ -56,38 +56,6 @@ const FlexTitle = styled.header`
   color: var(--white-shade);
 `;
 
-const PlusButton = styled.button`
-  background: none;
-  outline: none;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 50%;
-  display: flex;
-  place-items: center;
-  transition: background 0.2s ease-in-out;
-  cursor: pointer;
-  svg {
-    fill: var(--white);
-  }
-  :hover {
-    background: var(--primary-dark);
-  }
-  @media (min-width: 760px) {
-    padding: 0.8rem;
-    svg {
-      font-size: 1.5rem;
-    }
-  }
-`;
-
-const List = styled.ul`
-  list-style: none;
-  overflow-y: scroll;
-  height: 100%;
-  @media (min-width: 760px) {
-    width: 90%;
-  }
-`;
 const GroupItem = styled.li`
   padding: 1rem;
   display: flex;

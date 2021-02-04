@@ -12,7 +12,6 @@ const Container = styled.section`
 
   @media (min-width: 760px) {
     display: grid;
-    grid-gap: 1rem;
     grid-template-columns: 20% 80%;
   }
   @media (min-width: 1100px) {

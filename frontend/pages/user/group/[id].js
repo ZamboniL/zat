@@ -17,10 +17,11 @@ import { ReturnArrow } from "../../../components/ReturnArrow";
 import { GroupChats } from "../../../components/GroupChats";
 import { Title } from "../../../components/Title";
 import { socket } from "../../../service/socket";
+import { FormModal } from "../../../components/FormModal";
+import { NewUserForm } from "../../../components/NewUserForm";
 
 export default function Group({ group, messages, user, config }) {
   useEffect(() => {
-    console.log("gaarf");
     socket.emit("in group", group.tag);
   }, []);
   // Message content
@@ -42,12 +43,37 @@ export default function Group({ group, messages, user, config }) {
       });
   };
 
+  const [currentMembers, setCurrentMembers] = useState(group.users);
   useEffect(() => {
-    console.log("ggaa");
     socket.on("get new messages", (message) => {
       setMessages((newMessage) => [...newMessage, message]);
     });
+    socket.on("get new user", (user) => {
+      setCurrentMembers((currentMembers) => [...currentMembers, user]);
+    });
   }, []);
+
+  const [userModalOpen, setUserModalOpen] = useState(false);
+  const [tag, setTag] = useState("");
+  const handleTagChange = (e) => setTag(e.target.value);
+  const handleNewUserSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(
+        "http://localhost:4000/api/group/new_user",
+        { tag, groupId: group._id },
+        config
+      )
+      .then((res) => {
+        if (res.status === 200) {
+          setTag("");
+          setUserModalOpen(false);
+          socket.emit("new user added", res.data, group);
+          return true;
+        }
+      })
+      .catch((err) => console.log(err));
+  };
 
   // Open state for the hamburguer menu on mobile
   const [open, setOpen] = useState(false);
@@ -55,6 +81,12 @@ export default function Group({ group, messages, user, config }) {
   //
   return (
     <Layout>
+      <FormModal open={userModalOpen} setOpen={setUserModalOpen}>
+        <NewUserForm
+          onSubmit={handleNewUserSubmit}
+          onTagChange={handleTagChange}
+        />
+      </FormModal>
       <Nav>
         <ReturnArrow />
         <Title title={group.title} desc={group.desc} />
@@ -64,7 +96,11 @@ export default function Group({ group, messages, user, config }) {
 
       <Body>
         <GroupChats channels={group.canais} />
-        <Members members={group.users} className="members" />
+        <Members
+          members={currentMembers}
+          className="members"
+          onClick={() => setUserModalOpen(true)}
+        />
         <Chat messages={messagesArray} className="chat" />
       </Body>
 
@@ -75,7 +111,10 @@ export default function Group({ group, messages, user, config }) {
             height="50px"
             width="50px"
           />
-          <span>{user.username}</span>
+          <div>
+            <span>{user.username}</span>
+            <span>{user.tag}</span>
+          </div>
         </UserArea>
         <MessageBar
           onMessageChange={handleMessageChange}
@@ -90,6 +129,15 @@ export const getServerSideProps = async (ctx) => {
   var userWithToken = await ensureAuth(ctx); // Validate User
   const { id } = ctx.query;
   const data = await getData(`api/group/${id}`, userWithToken);
+  const condition = data.group.users.some(
+    (user) => user._id === userWithToken.user._id
+  );
+  if (!condition) {
+    console.log(data.group.users._id);
+    ctx.res.writeHead(302, { Location: "/user" });
+    ctx.res.end();
+  }
+  console.log(userWithToken.user.picture_filename);
   return {
     props: {
       group: data.group,
@@ -110,7 +158,15 @@ const UserArea = styled.section`
     align-items: center;
     padding: 1rem;
   }
-  span {
+  div {
+    display: flex;
+    flex-direction: column;
+  }
+  div span {
     padding-left: 0.5rem;
+  }
+  div span:nth-child(2) {
+    font-size: 0.8rem;
+    color: var(--white-shade);
   }
 `;

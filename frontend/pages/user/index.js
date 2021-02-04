@@ -5,7 +5,7 @@ import { ensureAuth } from "../../lib/auth";
 import { GroupList } from "../../components/GroupList";
 import { Hamburger } from "../../components/menu/Hamburguer";
 import Menu from "../../components/menu/Menu";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { UserTitle } from "../../components/UserTitle";
 import { UserPannel } from "../../components/UserPannel";
 import { UserList } from "../../components/FriendList";
@@ -15,8 +15,23 @@ import { NewGroupForm } from "../../components/NewGroupForm";
 import { NewFriendForm } from "../../components/NewFriendForm";
 import axios from "axios";
 import { getData } from "../../lib/getData";
+import { socket } from "../../service/socket";
 
 export default function User({ user, config, groups }) {
+  const [currentGroups, setCurrentGroups] = useState(groups);
+  const [currentFriends, setCurrentFriends] = useState(user.friends);
+  useEffect(() => {
+    socket.emit("user_tag", user.tag);
+  }, []);
+
+  useEffect(() => {
+    socket.on("get new group", (group) => {
+      setCurrentGroups((currentGroups) => [...currentGroups, group]);
+    });
+    socket.on("get new friend", (friend) => {
+      setCurrentFriends((currentFriends) => [...currentFriends, friend]);
+    });
+  }, []);
 
   // New Group Creation ---------------------------------------
   const [groupModalOpen, setGroupModalOpen] = useState(false);
@@ -37,6 +52,7 @@ export default function User({ user, config, groups }) {
           setTitle("");
           setDesc("");
           setGroupModalOpen(false);
+          socket.emit("new group created", res.data);
           return true;
         }
       })
@@ -55,6 +71,7 @@ export default function User({ user, config, groups }) {
         if (res.status === 200) {
           setTag("");
           setFriendModalOpen(false);
+          socket.emit("new friend added", res.data);
           return true;
         }
       })
@@ -91,12 +108,12 @@ export default function User({ user, config, groups }) {
       <Body full={true}>
         <UserPannel username={user.username} />
         <GroupList
-          groups={groups}
+          groups={currentGroups}
           category={category}
           modal={setGroupModalOpen}
         />
         <UserList
-          friends={user.friends}
+          friends={currentFriends}
           category={category}
           modal={setFriendModalOpen}
         />

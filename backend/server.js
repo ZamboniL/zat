@@ -58,14 +58,29 @@ app.use(express.static(__dirname + "/public"));
 // let usernameList = [];
 // let personList = [];
 io.sockets.on("connection", (socket) => {
-  console.log("Guu");
   var currentRoom;
+  var currentUser;
+
+  socket.on("user_tag", (tag) => {
+    currentUser = tag;
+    socket.join(currentUser);
+  });
   socket.on("in group", (tag) => {
     currentRoom = tag;
     socket.join(currentRoom);
   });
   socket.on("new message", (message) => {
     io.to(currentRoom).emit("get new messages", message);
+  });
+  socket.on("new user added", (user, group) => {
+    io.to(currentRoom).emit("get new user", user);
+    io.to(user.tag).emit("get new group", group);
+  });
+  socket.on("new group created", (group) => {
+    io.to(currentUser).emit("get new group", group);
+  });
+  socket.on("new friend added", (friend) => {
+    io.to(currentUser).emit("get new friend", friend);
   });
 });
 //   let currentPerson;
