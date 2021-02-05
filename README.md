@@ -6,25 +6,22 @@
 </div>
 
 <p align="center">
-  <img alt="Github top language" src="https://img.shields.io/github/languages/top/lzamboni/zat?color=56BEB8">
+  <img alt="Github top language" src="https://img.shields.io/github/languages/top/zambonil/zat?color=56BEB8">
 
-  <img alt="Github language count" src="https://img.shields.io/github/languages/count/lzamboni/zat?color=56BEB8">
+  <img alt="Github language count" src="https://img.shields.io/github/languages/count/zambonil/zat?color=56BEB8">
 
-  <img alt="Repository size" src="https://img.shields.io/github/repo-size/lzamboni/zat?color=56BEB8">
+  <img alt="Repository size" src="https://img.shields.io/github/repo-size/zambonil/zat?color=56BEB8">
 
-  <img alt="License" src="https://img.shields.io/github/license/lzamboni}/zat?color=56BEB8">
+  <img alt="License" src="https://img.shields.io/github/license/zambonil/zat?color=56BEB8">
 
 </p>
 
-
 <p align="center">
   <a href="#dart-about">About</a> &#xa0; | &#xa0; 
-  <a href="#sparkles-features">Features</a> &#xa0; | &#xa0;
   <a href="#rocket-technologies">Technologies</a> &#xa0; | &#xa0;
-  <a href="#white_check_mark-requirements">Requirements</a> &#xa0; | &#xa0;
-  <a href="#checkered_flag-starting">Starting</a> &#xa0; | &#xa0;
+    <a href="#what-i-learned">What I Learned</a> &#xa0; | &#xa0;
   <a href="#memo-license">License</a> &#xa0; | &#xa0;
-  <a href="https://github.com/{{YOUR_GITHUB_USERNAME}}" target="_blank">Author</a>
+  <a href="https://github.com/zambonil" target="_blank">Author</a>
 </p>
 
 <br>
@@ -49,8 +46,7 @@ The following tools were used in this project:
 - [Nextjs](https://nextjs.org/)
 - [Styled-Components](https://styled-components.com/)
 
-
-## What i learned
+## What I learned
 
 This project was huge for me, in scope and in lessons that I will certainly remember on my next project, if I had to break it down to a couple points it would be:
 
@@ -68,7 +64,7 @@ With all that I would say this project was certainly worth it and really fun to 
 
 This project is under license from MIT. For more details, see the [LICENSE](LICENSE.md) file.
 
-Made with :heart: by <a href="https://github.com/lzamboni" target="_blank">Lucas Zamboni Orioli</a>
+Made with :heart: by <a href="https://github.com/zambonil" target="_blank">Lucas Zamboni Orioli</a>
 
 &#xa0;
 
