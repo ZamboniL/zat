@@ -1,6 +1,5 @@
 const express = require("express");
 const router = express.Router();
-const async = require("async");
 const ObjectId = require("mongoose").Types.ObjectId;
 const auth = require("../middleware/auth");
 
@@ -56,7 +55,7 @@ router.get("/:id", auth, async function (req, res, next) {
 });
 
 // @route   /api/group/user/:user_id
-// @desc    Get group info
+// @desc    Get user groups info
 // @access  Private
 router.get("/user/:user_id", auth, (req, res) => {
   if (!ObjectId.isValid(req.params.user_id)) return Error({ status: 422 });

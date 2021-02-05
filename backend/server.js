@@ -6,7 +6,7 @@ require("dotenv").config();
 const cors = require("cors");
 const io = require("socket.io")(http, {
   cors: {
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     withCredentials: true,
   },
@@ -31,7 +31,7 @@ connection.once("open", () => {
 
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: process.env.CLIENT_URL,
     methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
     credentials: true,
   })
@@ -83,37 +83,6 @@ io.sockets.on("connection", (socket) => {
     io.to(currentUser).emit("get new friend", friend);
   });
 });
-//   let currentPerson;
-//   socket.on("username select", (person) => {
-//     currentPerson = person;
-//     personList.push(currentPerson);
-//     io.emit("user connected", currentPerson);
-//     io.emit("just connected", personList);
-//   });
-//   socket.on("private message", (msg, person, target) => {
-//     io.emit("private message", msg, person, target);
-//   });
-//   socket.on("chat message", (msg, person) => {
-//     io.emit("chat message", msg, person);
-//   });
-//   socket.on("user typing", (username) => {
-//     io.emit("user typing", username);
-//     usernameList.push(username);
-//     setTimeout(() => {
-//       let firstInstanceOfUser = usernameList.indexOf(username);
-//       usernameList.splice(firstInstanceOfUser, 1);
-//       if (!(usernameList.indexOf(username) == -1)) {
-//         return;
-//       }
-//       io.emit("user not typing anymore", username);
-//     }, 3000);
-//   });
-//   socket.on("disconnect", () => {
-//     io.emit("user disconnected", currentPerson.username);
-//     personIndex = personList.indexOf(currentPerson);
-//     personList.splice(personIndex, 1);
-//   });
-// });
 
 http.listen(port, () => {
   console.log(`listening on port *:${port}`);

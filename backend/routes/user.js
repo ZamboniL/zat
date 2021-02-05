@@ -31,6 +31,9 @@ router.post("/new_friend", auth, (req, res) => {
   });
 });
 
+// @route   /api/user/info/:id
+// @desc    Get user general information
+// @access  Private
 router.get("/info/:id", auth, async (req, res) => {
   const { id } = req.params;
   const user = await User.findById(id).populate("friends", "-password");
@@ -38,6 +41,9 @@ router.get("/info/:id", auth, async (req, res) => {
   res.json({ user, groups });
 });
 
+// @route   /api/user/friends
+// @desc    Get user friends
+// @access  Private
 router.get("/friends", auth, async (req, res) => {
   const { id } = req.user;
   const user = await User.findById(id)
@@ -47,7 +53,7 @@ router.get("/friends", auth, async (req, res) => {
 });
 
 // @route   /api/user/picture
-// @desc    Add a new friend
+// @desc    Change picture
 // @access  Private
 router.post("/picture", auth, (req, res) => {
   const { picture_filename } = req.body;
