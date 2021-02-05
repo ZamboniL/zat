@@ -49,10 +49,6 @@ app.use("/api/user", userRouter);
 app.use("/api/group", groupRouter);
 app.use("/api/message", messageRouter);
 
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/index.html");
-});
-
 app.use(express.static(__dirname + "/public"));
 
 // let usernameList = [];

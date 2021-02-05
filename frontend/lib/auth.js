@@ -7,7 +7,7 @@ export const isAuthenticated = async (ctx) => {
   if (!cookie) return false;
   const config = { headers: { "x-auth-token": cookie } };
   try {
-    const user = await axios.get("http://localhost:4000/api/auth/user", config);
+    const user = await axios.get(`${process.env.SERVER_URL}api/auth/user`, config);
     config.user = user.data;
     return config;
   } catch {

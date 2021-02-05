@@ -11,7 +11,7 @@ function MyApp({ Component, pageProps }) {
           content="Zat é um webapp de chat e conversa em grupos"
         />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta name="og:url" content="http://www.yourdomain.com" />
+        <meta name="og:url" content={process.env.SERVER_URL} />
         <meta property="og:title" content="Converse com o mundo usando Zat!" />
         <meta property="og:type" content="website" />
         <meta
@@ -20,9 +20,9 @@ function MyApp({ Component, pageProps }) {
         />
         <meta
           property="og:image"
-          content="http://www.yourdomain.com/images/og:image.png"
+          content={`${process.env.SERVER_URL}/images/og:image.png`}
         />
-        <meta name="twitter:url" content="http://www.yourdomain.com" />
+        <meta name="twitter:url" content={process.env.SERVER_URL} />
         <meta name="twitter:title" content="Converse com o mundo usando Zat!" />
         <meta
           name="twitter:description"
@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }) {
         />
         <meta
           name="twitter:image"
-          content="http://www.yourdomain.com/images/og:image.png"
+          content={`${process.env.SERVER_URL}/images/og:image.png`}
         />
       </Head>
       <Component {...pageProps} />

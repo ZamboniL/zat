@@ -10,7 +10,7 @@ import axios from "axios";
 //
 export const getData = async (path, config) => {
   try {
-    const res = await axios.get(`http://localhost:4000/${path}`, config);
+    const res = await axios.get(process.env.SERVER_URL + path, config);
     return res.data;
   } catch (err) {
     throw err;

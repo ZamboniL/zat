@@ -75,7 +75,7 @@ export default function User({ user, config, groups }) {
     }
     axios
       .post(
-        "http://localhost:4000/api/group/new",
+        `${process.env.SERVER_URL}api/group/new`,
         { title, desc, picture_filename, user },
         config
       )
@@ -113,7 +113,7 @@ export default function User({ user, config, groups }) {
     );
     console.log(picture_filename);
     axios.post(
-      "http://localhost:4000/api/user/picture",
+      `${process.env.SERVER_URL}api/user/picture`,
       { picture_filename },
       config
     );
@@ -136,7 +136,7 @@ export default function User({ user, config, groups }) {
   const handleNewFriendSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:4000/api/user/new_friend", { tag, user }, config)
+      .post(`${process.env.SERVER_URL}api/user/new_friend`, { tag, user }, config)
       .then((res) => {
         if (res.status === 200) {
           setTag("");

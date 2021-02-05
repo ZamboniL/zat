@@ -41,7 +41,7 @@ export default function Group({ group, messages, user, config }) {
     e.target.messageBar.value = "";
     const postData = { content, user, group: group._id };
     await axios
-      .post("http://localhost:4000/api/message/new", postData, config)
+      .post(`${process.env.SERVER_URL}/api/message/new`, postData, config)
       .then((res) => {
         setContent("");
         socket.emit("new message", res.data);
@@ -68,7 +68,7 @@ export default function Group({ group, messages, user, config }) {
     e.preventDefault();
     axios
       .post(
-        "http://localhost:4000/api/group/new_user",
+        `${process.env.SERVER_URL}api/group/new_user`,
         { tag, groupId: group._id },
         config
       )
@@ -102,7 +102,7 @@ export default function Group({ group, messages, user, config }) {
       (res) => (picture_filename = res.data.files.file.name) // save uploaded image filename
     );
     axios.post(
-      "http://localhost:4000/api/user/picture",
+      `${process.env.SERVER_URL}api/user/picture`,
       { picture_filename },
       config
     );

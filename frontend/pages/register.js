@@ -37,7 +37,7 @@ export default function Login() {
       if (errs.includes("Username")) setUsernameError(errs);
     }
     axios
-      .post("http://localhost:4000/api/auth/register", {
+      .post(`${process.env.SERVER_URL}api/auth/register`, {
         email,
         username,
         password,
