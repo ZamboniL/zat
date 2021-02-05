@@ -95,7 +95,7 @@ export default function User({ user, config, groups }) {
   };
   // ----------------------------------------------------------
   // Profile Picture Change -----------------------------------
-  const [profilePicture, setProfilePicture] = useState("");
+  const [profilePicture, setProfilePicture] = useState("y");
   const [picturePreview, setPicturePreview] = useState(
     `/images/userProfile/${user.picture_filename}`
   );
@@ -120,8 +120,9 @@ export default function User({ user, config, groups }) {
   };
   // Updates the picture for the user
   useEffect(() => {
+    if (profilePicture === "y") return;
     if (!profilePicture) {
-      setImagePreview(undefined);
+      setPicturePreview(undefined);
       return;
     }
     const objectUrl = URL.createObjectURL(profilePicture); // Generate url for component background-image
@@ -151,7 +152,7 @@ export default function User({ user, config, groups }) {
 
   const [category, setCategory] = useState("Amigos");
   return (
-    <Layout>
+    <Layout title={`Hi ${user.username}!`}>
       <FormModal open={groupModalOpen} setOpen={setGroupModalOpen}>
         <NewGroupForm
           title={title}
@@ -178,7 +179,13 @@ export default function User({ user, config, groups }) {
         />
 
         <Hamburger open={open} setOpen={setOpen} />
-        <Menu open={open} setOpen={setOpen} />
+        <Menu
+          user={user}
+          onPictureChange={handlePictureChange}
+          picture={picturePreview}
+          open={open}
+          setOpen={setOpen}
+        />
       </Nav>
       <Body full={true}>
         <UserPannel

@@ -1,5 +1,4 @@
-import AuthForm from "../components/AuthForm";
-import styled from "styled-components";
+import AuthForm from "../components/auth/AuthForm";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";

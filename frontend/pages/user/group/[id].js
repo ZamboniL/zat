@@ -20,6 +20,7 @@ import { socket } from "../../../service/socket";
 import { FormModal } from "../../../components/FormModal";
 import { NewUserForm } from "../../../components/NewUserForm";
 import Emoji from "../../../components/emojiPicker";
+import { imageUpload } from "../../../lib/uploadFile";
 
 export default function Group({ group, messages, user, config }) {
   useEffect(() => {
@@ -31,8 +32,6 @@ export default function Group({ group, messages, user, config }) {
   const [content, setContent] = useState("");
   const [emojiShopOpen, setEmojiShopOpen] = useState(false);
   const handleEmojiSelect = (emoji) => {
-    // setHere(emojiArray[Math.floor(Math.random() * 8)]);
-    // console.log(emoji.native);
     setEmojiShopOpen(!emojiShopOpen);
     setContent(content + emoji.native);
   };
@@ -86,10 +85,44 @@ export default function Group({ group, messages, user, config }) {
 
   // Open state for the hamburguer menu on mobile
   const [open, setOpen] = useState(false);
+  const [profilePicture, setProfilePicture] = useState("y");
+  const [picturePreview, setPicturePreview] = useState(
+    `/images/userProfile/${user.picture_filename}`
+  );
+  console.log(picturePreview);
+  const handlePictureChange = async (e) => {
+    e.preventDefault();
+    if (!e.target.files || e.target.files.length === 0) {
+      setProfilePicture(undefined);
+      return;
+    }
+    setProfilePicture(e.target.files[0]); // first save picture to the preview so user can see the new picture without updating
+    let picture_filename = "default.png";
+    await imageUpload(e.target.files[0], "./public/images/userProfile/").then(
+      (res) => (picture_filename = res.data.files.file.name) // save uploaded image filename
+    );
+    axios.post(
+      "http://localhost:4000/api/user/picture",
+      { picture_filename },
+      config
+    );
+  };
 
+  useEffect(() => {
+    if (!profilePicture) {
+      setPicturePreview(undefined);
+      return;
+    }
+    if (profilePicture === "y") {
+      return;
+    }
+    const objectUrl = URL.createObjectURL(profilePicture); // Generate url for component background-image
+    setPicturePreview(objectUrl);
+    return () => URL.revokeObjectURL(profilePicture); // Close URL when component is closed
+  }, [profilePicture]);
   //
   return (
-    <Layout>
+    <Layout title={group.title}>
       <FormModal open={userModalOpen} setOpen={setUserModalOpen}>
         <NewUserForm
           onSubmit={handleNewUserSubmit}
@@ -100,7 +133,13 @@ export default function Group({ group, messages, user, config }) {
         <ReturnArrow />
         <Title title={group.title} desc={group.desc} />
         <Hamburger open={open} setOpen={setOpen} />
-        <Menu open={open} setOpen={setOpen} />
+        <Menu
+          user={user}
+          onPictureChange={handlePictureChange}
+          picture={picturePreview}
+          open={open}
+          setOpen={setOpen}
+        />
       </Nav>
 
       <Body>
@@ -128,12 +167,7 @@ export default function Group({ group, messages, user, config }) {
           onMessageChange={handleMessageChange}
           onMessageSubmit={handleMessageSubmit}
           content={content}
-        />
-        <Emoji
-          onSelect={handleEmojiSelect}
-          open={emojiShopOpen}
-          setOpen={setEmojiShopOpen}
-        />
+        ></MessageBar>
       </Bottom>
     </Layout>
   );
@@ -147,11 +181,9 @@ export const getServerSideProps = async (ctx) => {
     (user) => user._id === userWithToken.user._id
   );
   if (!condition) {
-    console.log(data.group.users._id);
     ctx.res.writeHead(302, { Location: "/user" });
     ctx.res.end();
   }
-  console.log(userWithToken.user.picture_filename);
   return {
     props: {
       group: data.group,

@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import ImageInput from "./ImageInput";
+import ImageInput from "./common/ImageInput";
 
 export const NewGroupForm = ({
   title,

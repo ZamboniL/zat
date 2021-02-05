@@ -33,7 +33,7 @@ function MyApp({ Component, pageProps }) {
           content="http://www.yourdomain.com/images/og:image.png"
         />
       </Head>
-      <Component {...pageProps} />;
+      <Component {...pageProps} />
     </>
   );
 }

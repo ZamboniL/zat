@@ -5,8 +5,7 @@ export const Layout = ({ title, children }) => {
   return (
     <>
       <Head>
-        <title>{title}</title>{" "}
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{title}</title>
       </Head>
       <Grid>{children}</Grid>
     </>

@@ -65,17 +65,21 @@ export default function emoji({ onSelect, open, setOpen }) {
 }
 
 const EmojiButton = styled.button`
-  font-size: 1.5rem;
-  color: black;
-  cursor: pointer;
-  background: none;
-  border: none;
-  outline: none;
-  transition: 0.5s;
-  position: absolute;
-  transform: translateY(1.75rem) translateX(80rem);
-  :hover {
-    font-size: 1.75rem;
+  display: none;
+  @media (min-width: 1200px) {
+    display: block;
+    font-size: 1.5rem;
+    color: black;
+    cursor: pointer;
+    background: none;
+    border: none;
+    outline: none;
+    transition: 0.5s;
+    position: absolute;
+    transform: translateY(1.75rem) translateX(80rem);
+    :hover {
+      font-size: 1.75rem;
+    }
   }
 `;
 const EmojiPicker = styled(Picker)``;
