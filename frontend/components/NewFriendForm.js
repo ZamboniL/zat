@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const NewFriendForm = ({ onSubmit, onTagChange }) => {
+export const NewFriendForm = ({ onSubmit, onTagChange, tag }) => {
   return (
     <Container>
       <Title>Adicione um amigo</Title>
@@ -9,6 +9,7 @@ export const NewFriendForm = ({ onSubmit, onTagChange }) => {
           type="text"
           name="tag"
           id="tag"
+          value={tag}
           onChange={onTagChange}
           placeholder="#123456"
         />

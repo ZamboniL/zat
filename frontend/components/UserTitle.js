@@ -1,30 +1,58 @@
+import { useRouter } from "next/router";
+import { destroyCookie } from "nookies";
 import styled from "styled-components";
+import { MainButton } from "./common/MainButton";
+import OnOffButton from "./common/OnOffButton";
 
 export const UserTitle = ({ title, category, setCategory }) => {
+  const router = useRouter();
+  const handleLogout = () => {
+    destroyCookie(null, "token");
+    router.push("/");
+  };
   return (
     <>
       <Header>
         <h1>{title}</h1>
       </Header>
       <Switcher>
-        <Amigos
-          category={category}
-          onClick={(e) => setCategory(e.target.id)}
-          id="Amigos"
-        >
-          Amigos
-        </Amigos>
-        <Grupos
-          category={category}
-          id="Grupos"
-          onClick={(e) => setCategory(e.target.id)}
-        >
-          Grupos
-        </Grupos>
+        <div>
+          <OnOffButton
+            name="Amigos"
+            currentName={category}
+            setCurrentName={setCategory}
+          >
+            Amigos
+          </OnOffButton>
+          <OnOffButton
+            name="Grupos"
+            currentName={category}
+            setCurrentName={setCategory}
+          >
+            Grupos
+          </OnOffButton>
+        </div>
+        <LogoutContainer>
+          <MainButton onClick={() => handleLogout()}>logout</MainButton>
+        </LogoutContainer>
       </Switcher>
     </>
   );
 };
+
+const LogoutContainer = styled.div`
+  display: none;
+  @media (min-width: 760px) {
+    padding-right: 1rem;
+    display: block;
+    grid-column: 2 / 3;
+  }
+  @media (min-width: 1100px) {
+    padding: unset;
+    width: fit-content;
+    justify-self: center;
+  }
+`;
 
 const Header = styled.header`
   display: none;
@@ -42,29 +70,10 @@ const Header = styled.header`
   }
 `;
 
-const Switcher = styled.ul`
+const Switcher = styled.div`
   grid-column: 2 / 3;
   list-style: none;
   display: flex;
+  justify-content: space-between;
   margin-left: 2rem;
-
-  li {
-    font-size: 1.2rem;
-    font-weight: bold;
-    padding: 0.4rem;
-    border-radius: 10px;
-    margin-right: 2rem;
-    transition: background 0.2s ease-in-out;
-    cursor: pointer;
-  }
-`;
-
-const Amigos = styled.li`
-  background: ${({ category }) =>
-    category === "Amigos" ? "var(--primary-shade)" : "unset"};
-`;
-
-const Grupos = styled.li`
-  background: ${({ category }) =>
-    category === "Grupos" ? "var(--primary-shade)" : "unset"};
 `;

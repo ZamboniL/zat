@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { FaPlus } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
-import List from "./styledComponents/List";
+import List from "./common/List";
 
 export const GroupList = ({ groups, category, modal }) => {
   return (
@@ -23,7 +23,7 @@ export const GroupList = ({ groups, category, modal }) => {
             <Link href={`/user/group/${group._id}`}>
               <GroupItem>
                 <Image
-                  src={"/images/groupProfile/fernando.png"}
+                  src={`/images/groupProfile/${group.picture_filename}`}
                   height="75px"
                   width="75px"
                 />
@@ -48,7 +48,6 @@ const Container = styled.div`
     category === "Grupos" ? "translateX(0px)" : "translateX(1000px)"};
   opacity: ${({ category }) => (category === "Grupos" ? "1" : "0")};
   @media (min-width: 760px) {
-    padding: 1rem;
     grid-column: 2 /3;
   }
 `;
@@ -57,7 +56,10 @@ const FlexTitle = styled.header`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: var(--white-shade);
+  color: var(--white-dark);
+  h1 {
+    font-weight: 400;
+  }
 `;
 
 const PlusButton = styled.button`
@@ -84,10 +86,10 @@ const PlusButton = styled.button`
   }
 `;
 
-
 const GroupItem = styled.li`
   padding: 1rem;
   display: flex;
+  align-items: center;
   width: 100%;
   overflow-x: hidden;
   transition: background 0.2s ease-in-out;
@@ -95,7 +97,6 @@ const GroupItem = styled.li`
 
   section {
     padding-left: 0.5rem;
-    font-size: 1.2rem;
     width: 80%;
     h2,
     h3 {
@@ -103,6 +104,9 @@ const GroupItem = styled.li`
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
+    }
+    h3 {
+      font-weight: 400;
     }
   }
 

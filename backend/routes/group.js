@@ -14,10 +14,9 @@ const User = require("../models/user.model");
 // @desc    Create new group
 // @access  Private
 router.post("/new", auth, async function (req, res, next) {
-  const { title, desc, user } = req.body;
-
+  const { title, desc, picture_filename, user } = req.body;
   // Validation
-  if (!title || !desc || !user) {
+  if (!title || !desc || !picture_filename || !user) {
     return res.status(400).json({ msg: "Please enter all fields" });
   }
 
@@ -28,7 +27,7 @@ router.post("/new", auth, async function (req, res, next) {
     desc,
     tag,
     users: [user._id],
-    picture_filename: "/images/groupProfile/default.jpg",
+    picture_filename,
   });
 
   newGroup.save().then((group) => {

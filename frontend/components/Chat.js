@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import styled from "styled-components";
 import Messages from "./Messages";
-import List from "./styledComponents/List";
+import List from "./common/List";
 
 export default function Chat({ messages }) {
   const messagesEndRef = useRef(null);
@@ -26,4 +26,5 @@ export default function Chat({ messages }) {
 const Container = styled.section`
   grid-row: 1 / 2;
   grid-column: 2 / 3;
+  position: relative;
 `;

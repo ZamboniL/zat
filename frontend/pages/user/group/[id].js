@@ -19,6 +19,7 @@ import { Title } from "../../../components/Title";
 import { socket } from "../../../service/socket";
 import { FormModal } from "../../../components/FormModal";
 import { NewUserForm } from "../../../components/NewUserForm";
+import Emoji from "../../../components/emojiPicker";
 
 export default function Group({ group, messages, user, config }) {
   useEffect(() => {
@@ -28,6 +29,13 @@ export default function Group({ group, messages, user, config }) {
   const [messagesArray, setMessages] = useState(messages);
   useEffect(() => {}, []);
   const [content, setContent] = useState("");
+  const [emojiShopOpen, setEmojiShopOpen] = useState(false);
+  const handleEmojiSelect = (emoji) => {
+    // setHere(emojiArray[Math.floor(Math.random() * 8)]);
+    // console.log(emoji.native);
+    setEmojiShopOpen(!emojiShopOpen);
+    setContent(content + emoji.native);
+  };
   const handleMessageChange = (e) => setContent(e.target.value);
   const handleMessageSubmit = async (e) => {
     e.preventDefault();
@@ -36,6 +44,7 @@ export default function Group({ group, messages, user, config }) {
     await axios
       .post("http://localhost:4000/api/message/new", postData, config)
       .then((res) => {
+        setContent("");
         socket.emit("new message", res.data);
       })
       .catch((err) => {
@@ -103,11 +112,10 @@ export default function Group({ group, messages, user, config }) {
         />
         <Chat messages={messagesArray} className="chat" />
       </Body>
-
       <Bottom>
         <UserArea>
           <ProfilePicture
-            src={user.picture_filename}
+            src={`/images/userProfile/${user.picture_filename}`}
             height="50px"
             width="50px"
           />
@@ -119,6 +127,12 @@ export default function Group({ group, messages, user, config }) {
         <MessageBar
           onMessageChange={handleMessageChange}
           onMessageSubmit={handleMessageSubmit}
+          content={content}
+        />
+        <Emoji
+          onSelect={handleEmojiSelect}
+          open={emojiShopOpen}
+          setOpen={setEmojiShopOpen}
         />
       </Bottom>
     </Layout>

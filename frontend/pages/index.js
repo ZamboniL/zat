@@ -1,16 +1,16 @@
-import { Body } from "../components/chat/Body";
-import { Layout } from "../components/chat/Layout";
-import { Bottom } from "../components/chat/Bottom";
-import { Nav } from "../components/chat/Nav";
+import Hero from "../components/index/Hero";
+import IndexBody from "../components/index/IndexBody";
+import IndexNav from "../components/index/IndexNav";
+import LandingPageLayout from "../components/index/LandingPageLayout";
 
 export default function Home() {
   // localStorage.setItem("token", token);
   // alert("hi");
   return (
-    <Layout title="index">
-      <Nav />
-      <Body />
-      <Bottom />
-    </Layout>
+    <LandingPageLayout>
+      <IndexNav />
+      <Hero />
+      <IndexBody />
+    </LandingPageLayout>
   );
 }

@@ -3,7 +3,13 @@ import styled from "styled-components";
 export const ImageInput = ({ imagePreview, onChange }) => {
   return (
     <FileInput image={imagePreview}>
-      <input type="file" name="" id="" onChange={onChange} />
+      <input
+        type="file"
+        name="file"
+        id="file"
+        accept="image/png, image/jpeg"
+        onChange={onChange}
+      />
     </FileInput>
   );
 };

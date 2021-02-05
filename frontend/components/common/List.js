@@ -1,6 +1,7 @@
 import styled from "styled-components";
 
 const List = styled.ul`
+  position: absolute;
   list-style: none;
   overflow-y: scroll;
   margin-right: 5px;

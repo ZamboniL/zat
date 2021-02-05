@@ -4,6 +4,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
+import LayoutAuthForm from "../components/auth/LayoutAuthForm";
 
 export default function Login() {
   // user states and router
@@ -53,7 +54,7 @@ export default function Login() {
 
   return (
     <>
-      <LoginContainer>
+      <LayoutAuthForm type={"Login"}>
         <AuthForm
           type="login"
           onSubmit={handleSubmit}
@@ -62,17 +63,7 @@ export default function Login() {
           emailError={emailError}
           passwordError={passwordError}
         />
-      </LoginContainer>
+      </LayoutAuthForm>
     </>
   );
 }
-
-const LoginContainer = styled.section`
-  height: 100vh;
-  background: var(--primary-color);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-`;

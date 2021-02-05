@@ -5,7 +5,7 @@ export const GroupChats = ({ channels }) => {
     <Container>
       <h2>Chats</h2>
       {channels.map((channel) => {
-        return <div>{channel}</div>;
+        return <div key={channel}>{channel}</div>;
       })}
     </Container>
   );

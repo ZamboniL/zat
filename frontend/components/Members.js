@@ -12,19 +12,15 @@ export default function Members({ members, onClick }) {
       <MemberList>
         {members.map((member) => {
           return (
-            <Member>
+            <Member key={member.createdAt}>
               <div>
                 <ProfilePicture
-                  src={
-                    member.picture_filename
-                      ? member.picture_filename
-                      : "/images/userProfile/default.jpg"
-                  }
+                  src={`/images/userProfile/${member.picture_filename}`}
                   height="20px"
                   width="20px"
                 />
               </div>
-              <MemberItem key={member.createdAt}>{member.username}</MemberItem>
+              <MemberItem>{member.username}</MemberItem>
             </Member>
           );
         })}

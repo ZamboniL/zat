@@ -16,6 +16,8 @@ import { NewFriendForm } from "../../components/NewFriendForm";
 import axios from "axios";
 import { getData } from "../../lib/getData";
 import { socket } from "../../service/socket";
+import { imageUpload } from "../../lib/uploadFile";
+import { MainButton } from "../../components/common/MainButton";
 
 export default function User({ user, config, groups }) {
   const [currentGroups, setCurrentGroups] = useState(groups);
@@ -28,38 +30,105 @@ export default function User({ user, config, groups }) {
     socket.on("get new group", (group) => {
       setCurrentGroups((currentGroups) => [...currentGroups, group]);
     });
-    socket.on("get new friend", (friend) => {
-      setCurrentFriends((currentFriends) => [...currentFriends, friend]);
+    socket.on("get new friend", async (friend) => {
+      const friends = await getData(`api/user/friends`, config);
+      setCurrentFriends(friends);
     });
   }, []);
 
   // New Group Creation ---------------------------------------
+
+  // State for group creation
   const [groupModalOpen, setGroupModalOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
+  const [file, setFile] = useState("");
+  const [imagePreview, setImagePreview] = useState("");
+  const handleImageChange = (e) => {
+    e.preventDefault();
+    if (!e.target.files || e.target.files.length === 0) {
+      setFile(undefined);
+      return;
+    }
+    setFile(e.target.files[0]);
+  };
   const handleTitleChange = (e) => setTitle(e.target.value);
   const handleDescChange = (e) => setDesc(e.target.value);
-  const handleNewGroupSubmit = (e) => {
+
+  // Put a preview of the image selected on the input
+  useEffect(() => {
+    if (!file) {
+      setImagePreview(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(file); // Generate url for component background-image
+    setImagePreview(objectUrl);
+    return () => URL.revokeObjectURL(objectUrl); // Close URL when component is closed
+  }, [file]);
+  const handleNewGroupSubmit = async (e) => {
     e.preventDefault();
+    let picture_filename = "default.jpg";
+    if (file) {
+      await imageUpload(file, "./public/images/groupProfile/").then(
+        (res) => (picture_filename = res.data.files.file.name) // save uploaded image filename
+      );
+    }
     axios
       .post(
         "http://localhost:4000/api/group/new",
-        { title, desc, user },
+        { title, desc, picture_filename, user },
         config
       )
       .then((res) => {
         if (res.status === 200) {
+          // clean all related states
+          setFile("");
           setTitle("");
           setDesc("");
+          setImagePreview("");
           setGroupModalOpen(false);
-          socket.emit("new group created", res.data);
+          socket.emit("new group created", res.data); // transmit socket to load new group
           return true;
         }
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err.response.config.data));
   };
   // ----------------------------------------------------------
+  // Profile Picture Change -----------------------------------
+  const [profilePicture, setProfilePicture] = useState("");
+  const [picturePreview, setPicturePreview] = useState(
+    `/images/userProfile/${user.picture_filename}`
+  );
+  const handlePictureChange = async (e) => {
+    e.preventDefault();
+    if (!e.target.files || e.target.files.length === 0) {
+      setProfilePicture(undefined);
+      return;
+    }
+    setProfilePicture(e.target.files[0]); // first save picture to the preview so user can see the new picture without updating
 
+    let picture_filename = "default.png";
+    await imageUpload(e.target.files[0], "./public/images/userProfile/").then(
+      (res) => (picture_filename = res.data.files.file.name) // save uploaded image filename
+    );
+    console.log(picture_filename);
+    axios.post(
+      "http://localhost:4000/api/user/picture",
+      { picture_filename },
+      config
+    );
+  };
+  // Updates the picture for the user
+  useEffect(() => {
+    if (!profilePicture) {
+      setImagePreview(undefined);
+      return;
+    }
+    const objectUrl = URL.createObjectURL(profilePicture); // Generate url for component background-image
+    setPicturePreview(objectUrl);
+    return () => URL.revokeObjectURL(profilePicture); // Close URL when component is closed
+  }, [profilePicture]);
+  // ----------------------------------------------------------
   const [friendModalOpen, setFriendModalOpen] = useState(false);
   const [tag, setTag] = useState("");
   const handleTagChange = (e) => setTag(e.target.value);
@@ -71,8 +140,8 @@ export default function User({ user, config, groups }) {
         if (res.status === 200) {
           setTag("");
           setFriendModalOpen(false);
-          socket.emit("new friend added", res.data);
-          return true;
+          if (user.friends != res.data)
+            socket.emit("new friend added", res.data);
         }
       })
       .catch((err) => console.log(err));
@@ -85,13 +154,18 @@ export default function User({ user, config, groups }) {
     <Layout>
       <FormModal open={groupModalOpen} setOpen={setGroupModalOpen}>
         <NewGroupForm
+          title={title}
+          desc={desc}
+          imagePreview={imagePreview}
           onSubmit={handleNewGroupSubmit}
+          onImageChange={handleImageChange}
           onTitleChange={handleTitleChange}
           onDescChange={handleDescChange}
         />
       </FormModal>
       <FormModal open={friendModalOpen} setOpen={setFriendModalOpen}>
         <NewFriendForm
+          tag={tag}
           onSubmit={handleNewFriendSubmit}
           onTagChange={handleTagChange}
         />
@@ -102,11 +176,17 @@ export default function User({ user, config, groups }) {
           category={category}
           setCategory={setCategory}
         />
+
         <Hamburger open={open} setOpen={setOpen} />
         <Menu open={open} setOpen={setOpen} />
       </Nav>
       <Body full={true}>
-        <UserPannel username={user.username} />
+        <UserPannel
+          tag={user.tag}
+          username={user.username}
+          picture={picturePreview}
+          onChange={handlePictureChange}
+        />
         <GroupList
           groups={currentGroups}
           category={category}
@@ -140,7 +220,9 @@ export const getServerSideProps = async (ctx) => {
 };
 
 const RightBar = styled.section`
+  display: none;
   @media (min-width: 1100px) {
+    display: block;
     grid-column: 3/ 4;
     background: var(--primary-shade);
     position: relative;

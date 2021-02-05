@@ -1,10 +1,11 @@
-import AuthForm from "../components/AuthForm";
+import AuthForm from "../components/auth/AuthForm";
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { setCookie } from "nookies";
 import checkRegisterConditions from "../lib/checkRegisterConditions";
+import LayoutAuthForm from "../components/auth/LayoutAuthForm";
 
 export default function Login() {
   // user states and router
@@ -63,30 +64,17 @@ export default function Login() {
   };
 
   return (
-    <>
-      <LoginContainer>
-        <AuthForm
-          type="criar conta"
-          onSubmit={handleSubmit}
-          onEmailChange={handleEmailChange}
-          onUsernameChange={handleUsernameChange}
-          onPasswordChange={handlePasswordChange}
-          emailError={emailError}
-          usernameError={usernameError}
-          passwordError={passwordError}
-        />
-      </LoginContainer>
-    </>
+    <LayoutAuthForm type={"Registrar"}>
+      <AuthForm
+        type="criar conta"
+        onSubmit={handleSubmit}
+        onEmailChange={handleEmailChange}
+        onUsernameChange={handleUsernameChange}
+        onPasswordChange={handlePasswordChange}
+        emailError={emailError}
+        usernameError={usernameError}
+        passwordError={passwordError}
+      />
+    </LayoutAuthForm>
   );
 }
-
-const LoginContainer = styled.section`
-  height: 100vh;
-  background: var(--primary-color);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  text-align: left;
-  position: relative;
-`;

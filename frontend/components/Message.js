@@ -3,7 +3,11 @@ import { ProfilePicture } from "./ProfilePicture";
 const Message = ({ user, time, content }) => {
   return (
     <Item>
-      <ProfilePicture src={user.picture_filename} height="40px" width="40px" />
+      <ProfilePicture
+        src={`/images/userProfile/${user.picture_filename}`}
+        height="40px"
+        width="40px"
+      />
       <MessageInfo>
         <div>
           <Name>{user.username}</Name>

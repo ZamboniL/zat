@@ -1,9 +1,7 @@
-@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap");
-
 html,
 body {
-  font-family: "Quicksand", -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
   font-size: 18px;
 }
 
@@ -13,10 +11,15 @@ body {
   --white-shade: #91979b;
   --white-dark: #777c80;
   --black: #181b1d;
+  --black-tint: #41494e;
   --primary-color: #232536;
+  --primary-tint: #454970;
   --primary-shade: #1c1e2b;
   --primary-dark: #151822;
   --secondary-color: #2b4240;
+  --secondary-shade: #1b2928;
+  --complementary: #b53144;
+  --complementary-shade: #91182a;
   --error: #ff7272;
   color: var(--white);
 }
@@ -32,9 +35,15 @@ a {
   box-sizing: border-box;
 }
 
-input {
+input,
+button {
   border: none;
   outline: none;
+}
+button {
+  background: none;
+  color: inherit;
+  font-family: inherit;
 }
 
 #__next {

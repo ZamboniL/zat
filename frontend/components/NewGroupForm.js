@@ -1,46 +1,28 @@
-import image from "next/image";
-import { useEffect, useState } from "react";
 import styled from "styled-components";
 import ImageInput from "./ImageInput";
 
-export const NewGroupForm = ({ onSubmit, onTitleChange, onDescChange }) => {
-  const [file, setFile] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
-  const handleImageChange = (e) => {
-    e.preventDefault();
-    if (!e.target.files || e.target.files.length === 0) {
-      setFile(undefined);
-      return;
-    }
-    // I've kept this example simple by using the first image instead of multiple
-    setFile(e.target.files[0]);
-  };
-  useEffect(() => {
-    if (!file) {
-      setImagePreview(undefined);
-      return;
-    }
-    const objectUrl = URL.createObjectURL(file);
-    setImagePreview(objectUrl);
-    return () => URL.revokeObjectURL(objectUrl);
-  }, [file]);
-  console.log(file, imagePreview);
+export const NewGroupForm = ({
+  title,
+  desc,
+  onImageChange,
+  imagePreview,
+  onSubmit,
+  onTitleChange,
+  onDescChange,
+}) => {
   return (
     <Container>
       <Title>Crie um novo grupo</Title>
-
       <GroupForm onSubmit={onSubmit}>
         <FlexCenter>
-          <ImageInput
-            imagePreview={imagePreview}
-            onChange={(e) => handleImageChange(e)}
-          />
+          <ImageInput imagePreview={imagePreview} onChange={onImageChange} />
         </FlexCenter>
         <label htmlFor="title">Nome</label>
         <input
           type="text"
           name="title"
           id="title"
+          value={title}
           onChange={onTitleChange}
           required
         />
@@ -49,6 +31,7 @@ export const NewGroupForm = ({ onSubmit, onTitleChange, onDescChange }) => {
           type="text"
           name="desc"
           id="desc"
+          value={desc}
           onChange={onDescChange}
           required
         />

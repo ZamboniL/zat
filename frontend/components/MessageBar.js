@@ -1,6 +1,11 @@
 import styled from "styled-components";
 
-export default function MessageBar({ onMessageChange, onMessageSubmit }) {
+export default function MessageBar({
+  onMessageChange,
+  onMessageSubmit,
+  content,
+  children,
+}) {
   return (
     <Form autoComplete="off" onSubmit={onMessageSubmit}>
       <Input
@@ -8,7 +13,9 @@ export default function MessageBar({ onMessageChange, onMessageSubmit }) {
         name="messageBar"
         onChange={onMessageChange}
         placeholder="conversar..."
+        value={content}
       />
+      {children}
     </Form>
   );
 }

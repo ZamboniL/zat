@@ -19,7 +19,6 @@ const Container = styled.nav`
   @media (min-width: 760px) {
     padding: unset;
     display: grid;
-    grid-gap: 1rem;
     grid-template-columns: 20% 80%;
     background: var(--primary-color);
   }
