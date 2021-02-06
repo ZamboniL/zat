@@ -41,7 +41,7 @@ export default function Group({ group, messages, user, config }) {
     e.target.messageBar.value = "";
     const postData = { content, user, group: group._id };
     await axios
-      .post(`${process.env.SERVER_URL}/api/message/new`, postData, config)
+      .post(`${process.env.SERVER_URL}api/message/new`, postData, config)
       .then((res) => {
         setContent("");
         socket.emit("new message", res.data);
