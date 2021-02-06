@@ -1,22 +1,18 @@
 import { post } from "axios";
 import imageCompression from "browser-image-compression";
 
-export async function imageUpload(file, destiny) {
-  const options = {
-    maxSizeMB: 1,
-    maxWidthOrHeight: 200,
-    useWebWorker: true,
-  };
-  const compressedFile = await imageCompression(file, options);
-  console.log(compressedFile);
-  const url = "/api/upload-url";
+export async function imageUpload(file) {
+  const filename = encodeURIComponent(file.name);
+  const res = await fetch(`/api/upload-url?file=${filename}`);
+  const { url, fields } = await res.json();
   const formData = new FormData();
-  formData.append("file", compressedFile, compressedFile.name);
-  const config = {
-    headers: {
-      "content-type": "multipart/form-data",
-      destiny,
-    },
-  };
-  return post(url, formData, config);
+  Object.entries({ ...fields, file }).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+
+  const upload = await fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+  return upload;
 }

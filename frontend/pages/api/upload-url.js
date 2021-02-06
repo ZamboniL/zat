@@ -1,24 +1,21 @@
-import aws from "aws-sdk";
+import { Storage } from "@google-cloud/storage";
 
 export default async function handler(req, res) {
-  console.log(req);
-  aws.config.update({
-    accessKeyId: process.env.S3_ACCESS_KEY,
-    secretAccessKey: process.env.S3_SECRET,
-    region: process.env.S3_REGION,
-    signatureVersion: "v4",
-  });
-
-  const s3 = new aws.S3();
-  const post = await s3.createPresignedPost({
-    Bucket: process.env.S3_BUCKET_NAME,
-    Fields: {
-      key: req.body.formData.file,
+  console.log(process.env.PRIVATE_KEY);
+  const storage = new Storage({
+    projectId: process.env.PROJECT_ID,
+    credentials: {
+      client_email: process.env.CLIENT_EMAIL,
+      private_key: process.env.PRIVATE_KEY,
     },
-    Expires: 60, // seconds
-    Conditions: [
-      ["content-length-range", 0, 1048576], // up to 1 MB
-    ],
   });
-  res.status(200).json(post);
+  const bucket = storage.bucket(process.env.BUCKET_NAME);
+  const file = bucket.file(req.query.file);
+  const options = {
+    expires: Date.now() + 1 * 60 * 1000, //  1 minute,
+    fields: { "x-goog-meta-test": "data" },
+  };
+
+  const [response] = await file.generateSignedPostPolicyV4(options);
+  res.status(200).json(response);
 }

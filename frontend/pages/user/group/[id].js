@@ -97,10 +97,8 @@ export default function Group({ group, messages, user, config }) {
       return;
     }
     setProfilePicture(e.target.files[0]); // first save picture to the preview so user can see the new picture without updating
-    let picture_filename = "default.png";
-    await imageUpload(e.target.files[0], "./public/images/userProfile/").then(
-      (res) => (picture_filename = res.data.files.file.name) // save uploaded image filename
-    );
+    await imageUpload(e.target.files[0], "./public/images/userProfile/");
+    let picture_filename = profilePicture.name;
     axios.post(
       `${process.env.SERVER_URL}api/user/picture`,
       { picture_filename },

@@ -8,9 +8,7 @@ export default function Upload() {
     const res = await fetch(`/api/upload-url?file=${filename}`);
     const { url, fields } = await res.json();
     const formData = new FormData();
-    const imageFetch = await fetch(
-      "https://nextjszat.s3-sa-east-1.amazonaws.com/2021-01-17_17-29.png"
-    );
+    const imageFetch = `${process.env.S3_BUCKET_URL}2021-01-17_17-29.png`;
     setImage(imageFetch);
 
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
@@ -31,7 +29,7 @@ export default function Upload() {
 
   return (
     <>
-      <img src={image.url} alt="" />
+      <img src={image} alt="" />
       <p>Upload a .png or .jpg image (max 1MB).</p>
       <input
         onChange={uploadPhoto}

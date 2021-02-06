@@ -67,11 +67,9 @@ export default function User({ user, config, groups }) {
   }, [file]);
   const handleNewGroupSubmit = async (e) => {
     e.preventDefault();
-    let picture_filename = "default.jpg";
+    let picture_filename = file.name;
     if (file) {
-      await imageUpload(file, "./public/images/groupProfile/").then(
-        (res) => (picture_filename = res.data.files.file.name) // save uploaded image filename
-      );
+      await imageUpload(file);
     }
     axios
       .post(
@@ -97,7 +95,7 @@ export default function User({ user, config, groups }) {
   // Profile Picture Change -----------------------------------
   const [profilePicture, setProfilePicture] = useState("y");
   const [picturePreview, setPicturePreview] = useState(
-    `/images/userProfile/${user.picture_filename}`
+    process.env.S3_BUCKET_URL + user.picture_filename
   );
   const handlePictureChange = async (e) => {
     e.preventDefault();
@@ -105,13 +103,10 @@ export default function User({ user, config, groups }) {
       setProfilePicture(undefined);
       return;
     }
-    setProfilePicture(e.target.files[0]); // first save picture to the preview so user can see the new picture without updating
-
-    let picture_filename = "default.png";
-    await imageUpload(e.target.files[0], "./public/images/userProfile/").then(
-      (res) => (picture_filename = res.data.files.file.name) // save uploaded image filename
-    );
-    console.log(picture_filename);
+    const pictureFile = e.target.files[0];
+    setProfilePicture(pictureFile); // first save picture to the preview so user can see the new picture without updating
+    await imageUpload(pictureFile);
+    let picture_filename = pictureFile.name;
     axios.post(
       `${process.env.SERVER_URL}api/user/picture`,
       { picture_filename },
@@ -136,7 +131,11 @@ export default function User({ user, config, groups }) {
   const handleNewFriendSubmit = (e) => {
     e.preventDefault();
     axios
-      .post(`${process.env.SERVER_URL}api/user/new_friend`, { tag, user }, config)
+      .post(
+        `${process.env.SERVER_URL}api/user/new_friend`,
+        { tag, user },
+        config
+      )
       .then((res) => {
         if (res.status === 200) {
           setTag("");
