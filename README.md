@@ -45,6 +45,7 @@ The following tools were used in this project:
 - [React](https://pt-br.reactjs.org/)
 - [Nextjs](https://nextjs.org/)
 - [Styled-Components](https://styled-components.com/)
+- [Google Cloud Storage](https://cloud.google.com/storage?)
 
 ## What I learned
 
@@ -57,6 +58,7 @@ This project was huge for me, in scope and in lessons that I will certainly reme
 - The importance of the rendering method on each of my pages
 - General API usage and structure both from the frontend and backend
 - AUTH AUTH AND AUTH On the starting phase of this project I had a real problem with authentication, so I researched a ton to finally figure the theory out
+- At the last second I also had to learn how to use google cloud for file storage needs
 
 With all that I would say this project was certainly worth it and really fun to work on
 
