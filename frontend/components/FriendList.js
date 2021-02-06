@@ -20,7 +20,7 @@ export const UserList = ({ friends, category, modal }) => {
           return (
             <GroupItem key={friend.id}>
               <Image
-                src={`/images/groupProfile/${friend.picture_filename}`}
+                src={process.env.S3_BUCKET_URL + friend.picture_filename}
                 height="75px"
                 width="75px"
               />

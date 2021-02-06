@@ -4,7 +4,7 @@ const Message = ({ user, time, content }) => {
   return (
     <Item>
       <ProfilePicture
-        src={`/images/userProfile/${user.picture_filename}`}
+        src={process.env.S3_BUCKET_URL + user.picture_filename}
         height="40px"
         width="40px"
       />

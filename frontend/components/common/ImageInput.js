@@ -22,7 +22,7 @@ const FileInput = styled.label`
   height: 8rem;
   position: relative;
   background: ${({ image }) =>
-    image ? `url("${image}")` : `url("/images/groupProfile/default.jpg")`};
+    image ? `url("${image}")` : `url(${process.env.S3_BUCKET_URL}/default.jpg)`};
   background-size: cover;
   border: none;
   outline: none;

@@ -15,7 +15,7 @@ export default function Members({ members, onClick }) {
             <Member key={member.createdAt}>
               <div>
                 <ProfilePicture
-                  src={`/images/userProfile/${member.picture_filename}`}
+                  src={process.env.S3_BUCKET_URL + member.picture_filename}
                   height="20px"
                   width="20px"
                 />

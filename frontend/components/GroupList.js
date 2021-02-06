@@ -23,7 +23,7 @@ export const GroupList = ({ groups, category, modal }) => {
             <Link href={`/user/group/${group._id}`}>
               <GroupItem>
                 <Image
-                  src={`/images/groupProfile/${group.picture_filename}`}
+                  src={process.env.S3_BUCKET_URL + group.picture_filename}
                   height="75px"
                   width="75px"
                 />

@@ -154,7 +154,7 @@ export default function Group({ group, messages, user, config }) {
       <Bottom>
         <UserArea>
           <ProfilePicture
-            src={`/images/userProfile/${user.picture_filename}`}
+            src={process.env.S3_BUCKET_URL + user.picture_filename}
             height="50px"
             width="50px"
           />

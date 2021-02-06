@@ -9,7 +9,7 @@ export async function imageUpload(file, destiny) {
   };
   const compressedFile = await imageCompression(file, options);
   console.log(compressedFile);
-  const url = "/api/uploadfile";
+  const url = "/api/upload-url";
   const formData = new FormData();
   formData.append("file", compressedFile, compressedFile.name);
   const config = {
