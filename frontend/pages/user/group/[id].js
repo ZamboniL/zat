@@ -89,7 +89,6 @@ export default function Group({ group, messages, user, config }) {
   const [picturePreview, setPicturePreview] = useState(
     `/images/userProfile/${user.picture_filename}`
   );
-  console.log(picturePreview);
   const handlePictureChange = async (e) => {
     e.preventDefault();
     if (!e.target.files || e.target.files.length === 0) {

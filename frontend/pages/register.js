@@ -43,7 +43,6 @@ export default function Login() {
         password,
       })
       .then((res) => {
-        console.log(res);
         // set auth cookie on user
         if (res.status === 200) {
           setCookie(null, "token", res.data.token, {

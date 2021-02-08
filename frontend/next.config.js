@@ -1,6 +1,6 @@
 module.exports = {
   env: {
-    SERVER_URL: "https://damp-wave-88141.herokuapp.com/",
+    SERVER_URL: process.env.SERVER_URL,
     S3_BUCKET_URL: process.env.S3_BUCKET_URL,
     PROJECT_ID: process.env.PROJECT_ID,
     CLIENT_EMAIL: process.env.CLIENT_EMAIL,
