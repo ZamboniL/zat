@@ -54,6 +54,7 @@ export default function Login() {
         }
       })
       .catch((err) => {
+        console.log(err.response);
         const errMessage = err.response.data.msg;
         if (errMessage) {
           if (errMessage.includes("Email"))
