@@ -68,7 +68,7 @@ export default function User({ user, config, groups }) {
   }, [file]);
   const handleNewGroupSubmit = async (e) => {
     e.preventDefault();
-    let picture_filename = file.name ? file.name : "defaultGroupPicture.jpg";
+    let picture_filename = file.name ? file.name : "defaultGroupProfile.jpg";
     if (file) {
       await imageUpload(file);
     }

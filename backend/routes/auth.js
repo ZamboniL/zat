@@ -25,7 +25,7 @@ router.post("/register", async (req, res) => {
       username,
       email,
       password,
-      picture_filename: "/images/userProfile/default.jpg",
+      picture_filename: "userDefaultProfile.jpg",
       tag,
     });
     // Password hash generation
