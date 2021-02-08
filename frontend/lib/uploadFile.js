@@ -1,3 +1,5 @@
+import { post } from "axios";
+
 export async function imageUpload(file) {
   const filename = encodeURIComponent(file.name);
   const res = await fetch(`/api/upload-url?file=${filename}`);
@@ -7,9 +9,6 @@ export async function imageUpload(file) {
     formData.append(key, value);
   });
 
-  const upload = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-  return upload;
+  const upload = await post(url, formData);
+  return "done";
 }
