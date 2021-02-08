@@ -1,10 +1,11 @@
 import { Storage } from "@google-cloud/storage";
 export default async function handler(req, res) {
+  const { privateKey } = JSON.parse(process.env.PRIVATE_KEY);
   const storage = new Storage({
     projectId: process.env.PROJECT_ID,
     credentials: {
       client_email: process.env.CLIENT_EMAIL,
-      private_key: process.env.PRIVATE_KEY,
+      private_key: privateKey,
     },
   });
   const bucket = storage.bucket(process.env.BUCKET_NAME);
