@@ -17,7 +17,6 @@ import axios from "axios";
 import { getData } from "../../lib/getData";
 import { socket } from "../../service/socket";
 import { imageUpload } from "../../lib/uploadFile";
-import { MainButton } from "../../components/common/MainButton";
 
 export default function User({ user, config, groups }) {
   const [currentGroups, setCurrentGroups] = useState(groups);
@@ -43,7 +42,9 @@ export default function User({ user, config, groups }) {
   const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState("");
-  const [imagePreview, setImagePreview] = useState("");
+  const [imagePreview, setImagePreview] = useState(
+    process.env.S3_BUCKET_URL + "defaultGroupProfile.png"
+  );
   const handleImageChange = (e) => {
     e.preventDefault();
     if (!e.target.files || e.target.files.length === 0) {
