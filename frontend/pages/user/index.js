@@ -43,7 +43,7 @@ export default function User({ user, config, groups }) {
   const [desc, setDesc] = useState("");
   const [file, setFile] = useState("");
   const [imagePreview, setImagePreview] = useState(
-    process.env.S3_BUCKET_URL + "defaultGroupProfile.png"
+    process.env.S3_BUCKET_URL + "defaultGroupProfile.jpg"
   );
   const handleImageChange = (e) => {
     e.preventDefault();

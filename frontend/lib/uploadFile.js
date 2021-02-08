@@ -1,6 +1,3 @@
-import { post } from "axios";
-import imageCompression from "browser-image-compression";
-
 export async function imageUpload(file) {
   const filename = encodeURIComponent(file.name);
   const res = await fetch(`/api/upload-url?file=${filename}`);
